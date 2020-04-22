@@ -12,7 +12,7 @@
 // Al main le vamos a pasar, el nobmre del archivo base, el de salida
 // y la cant de elementos a generar.
 int main (int argc, char **argv){
-  printf ("%d", argc);
+  printf ("%d\n", argc);
   // Cambiando la semilla de generacion.
   srand (time(NULL));
   int cant = atoi(argv[4]);

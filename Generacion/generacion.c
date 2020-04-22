@@ -129,4 +129,6 @@ Notas:
 3-  Diferencia entre const void y void?
 
 4-  Solucionar errores de valgrind.
+
+5- No tenemos problemas con los caracteres especiales (? (???????
 */
