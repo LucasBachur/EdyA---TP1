@@ -2,15 +2,79 @@
 #include <stdlib.h>
 #include "glist.h"
 
-void liberar(void *numero){
-    free(numero);
+#define BUFFER 80
+
+typedef struct {
+char *nombre;
+int edad;
+char *lugarDeNacimiento; // pais o capital
+} Persona;
+
+// Adaptar a nuestro caso particular.
+void liberar (void *dato){
+    free (dato);
 }
 
+void imprimir_persona_archivo (void *dato, FILE *Archivo){
+  fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
+}
+
+// Dado un nombre, una edad, y un pais. Devuelve un puntero a Persona que tiene
+// un solo elemento y sus datos son los que se pasaron a la funcion.
+Persona* crear_persona (char *nombre, int edad, char *pais){
+  Persona *nuevaPersona = malloc (sizeof (Persona));
+  nuevaPersona->nombre = nombre;
+  nuevaPersona->edad = edad;
+  nuevaPersona->lugarDeNacimiento = pais;
+
+  return nuevaPersona;
+}
+
+// Dado un nombre de un archivo de entrada, devuelve una lista con sus datos.
+GList interpretar_archivo (char *nombreArchivoEntrada){
+  printf ("Interpretar archivo:\n");
+  GList listaInterpretada = glist_crear ();
+  FILE *Archivo = fopen (nombreArchivoEntrada, "r");
+  if (Archivo != NULL){
+    printf ("Archivo abierto con extio.\n");
+    Persona *personaAlegre = NULL; // que elagancia la de francia
+    char nombre[BUFFER];
+    int edad;
+    char pais[BUFFER];
+    int contador = 0;
+    while (!feof (Archivo)){
+      printf ("Iteracion numero: |%d|\n", contador);
+      fscanf (Archivo, "%[^,],", nombre);
+      fscanf (Archivo, "%d,", &edad);
+      fscanf (Archivo, "%[^\n]\n", pais);
+      printf ("Creando la persona\n");
+      printf ("datos. nombre: |%s|. edad: |%d|. pais: |%s|.\n", nombre, edad, pais);
+      personaAlegre = crear_persona (nombre, edad, pais);
+      printf ("Agreando a persona a la lista.\n");
+      glist_agregar_final (&listaInterpretada, personaAlegre);
+      ++contador;
+    }
+  }else{
+    printf ("Archivo para generar lista fallo.\n");
+  }
+  fclose (Archivo);
+  printf ("Archivo cerrado, lista creada.\n");
+  return listaInterpretada;
+}
+
+
+
 int main (){
-    GList prueba = glist_crear();
-    int array[20] = {1,2,3,4,5,6,7,8,9,10};
-    for(int i=0;i<10;++i)
-        glist_agregar_final (&prueba, (array+i));
-    printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
-    glist_destruir(&prueba,liberar);
+  GList prueba = glist_crear ();
+
+  char *nombreArchivoEntrada = "/home/scalbi/Programacion/Estructuras de datos y algoritmos/Trabajo/EdyA---TP1-master/EdyA---TP1/Generacion/salidas1.txt";
+  char *nombreArchivoSalida = "prueba.txt";
+
+  prueba = interpretar_archivo (nombreArchivoEntrada);
+  printf ("Luego de interpretar archivo.\n");
+  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, nombreArchivoSalida);
+
+
+  // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
+  glist_destruir(&prueba,liberar);
 }

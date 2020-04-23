@@ -13,7 +13,7 @@ void glist_agregar_inicio (GList *lista, void *dato){
   GNodo *nuevoNodo = malloc (sizeof (GNodo));
   nuevoNodo->dato = dato;
   nuevoNodo->sig = lista->inicio;
-  if (lista->inicio == NULL) 
+  if (lista->inicio == NULL)
     lista->final = nuevoNodo;
   lista->inicio = nuevoNodo;
 }
@@ -32,6 +32,20 @@ void glist_agregar_final (GList *lista, void *dato){
     lista->final->sig = nuevoNodo;
     lista->final = nuevoNodo;
   }
+}
+
+void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida){
+  FILE *Archivo = fopen (nombreArchivoSalida, "w");
+  if (Archivo != NULL){
+    GNodo *iterador = lista->inicio;
+
+    while (iterador != NULL){
+      funcion (iterador->dato, Archivo);
+    }
+  }else{
+    printf ("Archivo de escritura fallo.\n");
+  }
+  fclose (Archivo);
 }
 
 GList first (GList lista){
@@ -56,12 +70,10 @@ void glist_destruir (GList *lista, Destruir funcion){
   GNodo *iterador = lista->inicio;
   GNodo *libertador;
 
-  for (; iterador != NULL ; ){
+  for (; iterador != NULL; ){
     libertador = iterador;
     iterador = iterador->sig;
-    funcion (libertador);
+    funcion (libertador->dato);
     free (libertador);
   }
 }
-
-

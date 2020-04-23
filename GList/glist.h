@@ -14,6 +14,8 @@ typedef struct _GList {
 
 typedef void (*Destruir) (void *dato);
 typedef int (*Comparar) (void *dato1, void *dato2);
+typedef void (*ImprimeArchivo) (void *dato, FILE *archivo);
+typedef GList (*Ordenamiento) (void *GList, Comparar comparacion);
 
 // Crea una glist.
 GList glist_crear ();
@@ -27,6 +29,8 @@ void glist_agregar_inicio (GList *lista, void* dato);
 // Crea un nuevo nodo cuyo puntero apunta a NULL, y es el siguiente
 // al anterior puntero de la lista.
 void glist_agregar_final (GList *lista, void* dato);
+
+void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida);
 
 // Devuelve el primer elemento de una lista.
 GList first (GList lista);
