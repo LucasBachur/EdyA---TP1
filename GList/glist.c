@@ -2,6 +2,13 @@
 #include <stdlib.h>
 #include "glist.h"
 
+typedef struct {
+char *nombre;
+int edad;
+char *lugarDeNacimiento; // pais o capital
+} Persona;
+
+
 GList glist_crear (){
   GList nueva;
   nueva.inicio = NULL;
@@ -36,11 +43,13 @@ void glist_agregar_final (GList *lista, void *dato){
 
 void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida){
   FILE *Archivo = fopen (nombreArchivoSalida, "w");
+  printf ("\nComienzo de funcion ImprimirArchivo\n");
   if (Archivo != NULL){
     GNodo *iterador = lista->inicio;
 
     while (iterador != NULL){
       funcion (iterador->dato, Archivo);
+      iterador = iterador->sig;
     }
   }else{
     printf ("Archivo de escritura fallo.\n");

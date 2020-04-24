@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "glist.h"
 
 #define BUFFER 180
@@ -10,47 +11,52 @@ int edad;
 char *lugarDeNacimiento; // pais o capital
 } Persona;
 
+
+
+
 // Adaptar a nuestro caso particular.
-void liberar (void *dato){
-    free (dato);
+void liberar_persona (void *persona){
+  free (((Persona*)persona)->nombre);
+  free (((Persona*)persona)->lugarDeNacimiento);
+  free (persona);
 }
 
 void imprimir_persona_archivo (void *dato, FILE *Archivo){
   fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
+  printf ("%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
 }
 
 // Dado un nombre, una edad, y un pais. Devuelve un puntero a Persona que tiene
 // un solo elemento y sus datos son los que se pasaron a la funcion.
 Persona* crear_persona (char *nombre, int edad, char *pais){
   Persona *nuevaPersona = malloc (sizeof (Persona));
-  nuevaPersona->nombre = nombre;
+  nuevaPersona->nombre = malloc (sizeof (char) * 80);
+  nuevaPersona->lugarDeNacimiento =  malloc (sizeof (char) * 80);
+
+  strcpy (nuevaPersona->nombre, nombre);
   nuevaPersona->edad = edad;
-  nuevaPersona->lugarDeNacimiento = pais;
+  strcpy (nuevaPersona->lugarDeNacimiento, pais);
 
   return nuevaPersona;
 }
 
 // Dado un nombre de un archivo de entrada, devuelve una lista con sus datos.
 GList interpretar_archivo (char *nombreArchivoEntrada){
-  printf ("Interpretar archivo:\n");
   GList listaInterpretada = glist_crear ();
   FILE *Archivo = fopen (nombreArchivoEntrada, "r");
   if (Archivo != NULL){
-    printf ("Archivo abierto con extio.\n");
-    //Persona *personaAlegre = NULL; // que elagancia la de francia
-    char nombre[BUFFER]/*, pais[BUFFER]*/;
-    // int edad;
-    int contador = 0;
-    while (fscanf (Archivo, "%[^\n]\n", nombre) != EOF){
-      printf ("Iteracion numero: |%d|\n", contador);
-
-      printf ("Creando la persona\n");
-      //printf ("\ndatos. nombre: |%s|. edad: |%d|. pais: |%s|.\n", nombre, edad, pais);
-      printf ("nombre: |%s|\n", nombre);
-      // personaAlegre = crear_persona (nombre, edad, pais);
-      // printf ("Agreando a persona a la lista.\n");
-      // glist_agregar_final (&listaInterpretada, personaAlegre);
-      ++contador;
+    // Archivo abierto con extio.
+    Persona *personaAlegre = NULL; // que elagancia la de francia
+    char nombre[BUFFER], pais[BUFFER];
+    int edad;
+    while (fscanf (Archivo, "%[^,], %d, %[^\n]\n", nombre, &edad, pais) != EOF){
+      // Creando la persona.
+      personaAlegre = crear_persona (nombre, edad, pais);
+      // Agreando a persona a la lista.
+      glist_agregar_final (&listaInterpretada, personaAlegre);
+    }
+    if (feof(Archivo)){
+      printf ("Se leyo correctamente el archivo.\n");
     }
   }else{
     printf ("Archivo para generar lista fallo.\n");
@@ -74,5 +80,5 @@ int main (){
 
 
   // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
-  glist_destruir(&prueba,liberar);
+  glist_destruir(&prueba,liberar_persona);
 }
