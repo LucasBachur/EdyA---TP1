@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "glist.h"
 
-#define BUFFER 80
+#define BUFFER 180
 
 typedef struct {
 char *nombre;
@@ -37,21 +37,19 @@ GList interpretar_archivo (char *nombreArchivoEntrada){
   FILE *Archivo = fopen (nombreArchivoEntrada, "r");
   if (Archivo != NULL){
     printf ("Archivo abierto con extio.\n");
-    Persona *personaAlegre = NULL; // que elagancia la de francia
-    char nombre[BUFFER];
-    int edad;
-    char pais[BUFFER];
+    //Persona *personaAlegre = NULL; // que elagancia la de francia
+    char nombre[BUFFER]/*, pais[BUFFER]*/;
+    // int edad;
     int contador = 0;
-    while (!feof (Archivo)){
+    while (fscanf (Archivo, "%[^\n]\n", nombre) != EOF){
       printf ("Iteracion numero: |%d|\n", contador);
-      fscanf (Archivo, "%[^,],", nombre);
-      fscanf (Archivo, "%d,", &edad);
-      fscanf (Archivo, "%[^\n]\n", pais);
+
       printf ("Creando la persona\n");
-      printf ("datos. nombre: |%s|. edad: |%d|. pais: |%s|.\n", nombre, edad, pais);
-      personaAlegre = crear_persona (nombre, edad, pais);
-      printf ("Agreando a persona a la lista.\n");
-      glist_agregar_final (&listaInterpretada, personaAlegre);
+      //printf ("\ndatos. nombre: |%s|. edad: |%d|. pais: |%s|.\n", nombre, edad, pais);
+      printf ("nombre: |%s|\n", nombre);
+      // personaAlegre = crear_persona (nombre, edad, pais);
+      // printf ("Agreando a persona a la lista.\n");
+      // glist_agregar_final (&listaInterpretada, personaAlegre);
       ++contador;
     }
   }else{
