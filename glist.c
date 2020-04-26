@@ -69,6 +69,14 @@ GList last (GList lista){
   return nuevo;
 }
 
+GList glist_cpy (GList lista){
+  GList nuevaLista = glist_crear ();
+  forrapido (lista, iterador){
+    glist_agregar_final (&nuevaLista, iterador->dato);
+  }
+  return nuevaLista;
+}
+
 // Funciona intercambiando datos.
 void glist_intercambiar (GNodo *nodo1, GNodo *nodo2){
   void *datoAuxiliar = NULL;
@@ -77,27 +85,28 @@ void glist_intercambiar (GNodo *nodo1, GNodo *nodo2){
   nodo2->dato = datoAuxiliar;
 }
 
-
-
 void glist_mover (GList *lista, GNodo *antNodo1, GNodo *antNodo2){
   // Guardando referencia al nodo relevante.
   GNodo *relevante = antNodo2->sig;
   // Haciendo que la lista "saltee" al nodo relevante.
   antNodo2->sig = relevante->sig;
   // El siguiente a relevante, es ahora el indicado.
-  relevante->sig = antnodo1->sig;
+  relevante->sig = antNodo1->sig;
   // Colocando relevante en la lista.
-  antnodo1->sig = relevante;
+  antNodo1->sig = relevante;
   // Si relevante era el final de la lista..
   if (antNodo2 ->sig == NULL)
     lista->final = antNodo2;
-  }
 }
 
-void glist_mover_pos0 (GList *lista, GNodo *nodoInicial, GNodo *antNodo2){
+void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial){
   // Guardando referencia al nodo relevante.
   GNodo *relevante = antNodo2->sig;
-  // Haciendo que la lista "saltee" al nodo relevante.
+  // Haciendo que la lista "saltee" al nodo relevante, y tambien, notese que
+  // cuando se llame a la funcion, antNodo2 sera el nodo anterior al que se
+  // compara, por lo tanto, este adelantamiento, sumado a que el relevante
+  // se colocara al comienzo de la lista, nos deja ya colocado antComparando
+  // en la posicion indicada para la proxima iteracion.
   antNodo2->sig = relevante->sig;
   // Estableciendo relevante como el nuevo comienzo de la lista.
   relevante->sig = nodoInicial;
@@ -107,11 +116,11 @@ void glist_mover_pos0 (GList *lista, GNodo *nodoInicial, GNodo *antNodo2){
     lista->final = antNodo2;
 }
 
-
-void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento,
-  Compara comparar, GList lista){
-  lista = metodo_ordenamiento (lista, comparar);
-  glist_imprimir_archivo (&lista, metodo_impresion, nombreArchivoSalida);
+void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento, Compara comparar, GList lista){
+  GList listaAOdenar = glist_cpy (lista);
+  listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
+  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida);
+  glist_destruir (&listaAOdenar, nada);
 }
 
 GList glist_selection_sort (GList lista, Compara funcion){
@@ -133,18 +142,27 @@ GList glist_selection_sort (GList lista, Compara funcion){
 
 GList glist_insertion_sort (GList lista, Compara funcion){
   // Se comienza desde el segundo puesto que una lista de 1 elmeento esta ordenada.
-  GNodo *iterador = lista.incio->sig;
-  GNodo *iterador2 =;
+  GNodo *antComparando = lista.inicio;
+  GNodo *iterador2 = NULL;
 
-
-  for (; iterador != NULL; iterador = iterador->sig){
-    
+  while (antComparando->sig != NULL){
     iterador2 = lista.inicio;
-    while (!funcion (iterador2->sig->dato, iterador->dato) && iterador2->sig != iterador)
-      iterador2 = iterador2->sig;
+    if (funcion (antComparando->sig->dato, iterador2->dato)){
+      glist_mover_pos0 (&lista, antComparando, iterador2);
     }
-    if (iterador2->sig == iterador1)
+    else {
+      while (iterador2 != antComparando && !funcion (antComparando->sig->dato, iterador2->sig->dato)){
+        iterador2 = iterador2->sig;
+      } // Si salio del bucle por esto, entonces la lista parcial esta ordenada.
+      if (iterador2 == antComparando){
+        antComparando = antComparando->sig;
+      }
+      else {
+        glist_mover (&lista, iterador2, antComparando);
+      }
+    }
   }
+  return lista;
 }
 
 void glist_destruir (GList *lista, Destruir funcion){
@@ -157,4 +175,9 @@ void glist_destruir (GList *lista, Destruir funcion){
     funcion (libertador->dato);
     free (libertador);
   }
+}
+
+void nada (void *dato){
+  dato = dato + 1;
+  dato = dato - 1;
 }

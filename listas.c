@@ -5,30 +5,22 @@
 
 #define BUFFER 180
 
-typedef struct {
-char *nombre;
-int edad;
-char *lugarDeNacimiento; // pais o capital
-} Persona;
-
-int edad_menor (void *dato1, void *dato2){
-  int edad1 = ((Persona*)dato1)->edad;
-  int edad2 = ((Persona*)dato2)->edad;
-  return edad1 < edad2;
-}
-
-// Adaptar a nuestro caso particular.
 void liberar_persona (void *persona){
   free (((Persona*)persona)->nombre);
   free (((Persona*)persona)->lugarDeNacimiento);
   free (persona);
 }
 
-void imprimir_persona_archivo (void *dato, FILE *Archivo){
-  fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
-  printf ("%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
+int edad_mayor (void *dato1, void *dato2){
+  int edad1 = ((Persona*)dato1)->edad;
+  int edad2 = ((Persona*)dato2)->edad;
+  return edad1 > edad2;
 }
 
+// Adaptar a nuestro caso particular.
+void imprimir_persona_archivo (void *dato, FILE *Archivo){
+  fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
+}
 // Dado un nombre, una edad, y un pais. Devuelve un puntero a Persona que tiene
 // un solo elemento y sus datos son los que se pasaron a la funcion.
 Persona* crear_persona (char *nombre, int edad, char *pais){
@@ -82,7 +74,7 @@ int main (){
   // glist_imprimir_archivo (&prueba, imprimir_persona_archivo, nombreArchivoSalida);
 
 
-  glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_selection_sort, edad_menor, prueba);
+  glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_insertion_sort, edad_mayor, prueba);
 
 
   // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));

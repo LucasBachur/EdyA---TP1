@@ -3,6 +3,12 @@
 
 #define forrapido(lista, iterador) for (GNodo *iterador = lista.inicio; iterador != NULL; iterador = iterador->sig)
 
+typedef struct {
+char *nombre;
+int edad;
+char *lugarDeNacimiento; // pais o capital
+} Persona;
+
 typedef struct _GNodo {
   void *dato;
   struct _GNodo *sig;
@@ -66,5 +72,6 @@ GList merge (GList left, GList right, Compara funcion);
 // personalizada para liberar tipo de dato que se este llevando en ella.
 void glist_destruir (GList *lista, Destruir funcion);
 
+void nada (void *dato);
 
 #endif
