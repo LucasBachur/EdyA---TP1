@@ -51,25 +51,13 @@ void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreA
   fclose (Archivo);
 }
 
-GList first (GList lista){
-  GList nuevo = glist_crear();
-  glist_agregar_inicio (&nuevo, lista.inicio->dato);
-  return nuevo;
-}
 
-void rest (GList lista){
-  GNodo *aux = lista.inicio;
-  lista.inicio = lista.inicio->sig;
-  free(aux);
-}
 
-GList last (GList lista){
-  GList nuevo = glist_crear();
-  glist_agregar_inicio (&nuevo, lista.final->dato);
-  return nuevo;
-}
-
-GList glist_cpy (GList lista){
+// Dada una lista, devuelve una nueva lista con nuevos nodos identicos.
+// Cabe recalcar, que los punteros a los datos siguen siendo los de la lista
+// original. Por lo tanto si se ven alterados en una lista o la otra, los
+// cambios se veran reflejados en ambas.
+GList glist_copiar_nodos (GList lista){
   GList nuevaLista = glist_crear ();
   forrapido (lista, iterador){
     glist_agregar_final (&nuevaLista, iterador->dato);
@@ -116,11 +104,66 @@ void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial){
     lista->final = antNodo2;
 }
 
+
+void glist_merge (GNodo **lista1, GNodo **lista2, Compara comparar){
+  GNodo *resultado = NULL;
+  GNodo *iterador_lista1 = *lista1;
+  GNodo *iterador_lista2 = *lista2;
+  // Primero se necesita decidir cual sera el comienzo de resultado.
+  if (comparar (iterador_lista1->dato, iterador_lista2->dato)){
+    resultado = iterador_lista1;
+    iterador_lista1 = iterador_lista1->sig;
+  }
+  else {
+    resultado = iterador_lista2;
+    lista1 = lista2; // De esta forma, lista 1 sera el comienzo de la lista mergeada total.
+    iterador_lista2 = iterador_lista2->sig;
+  }
+
+  while (iterador_lista1 != NULL && iterador_lista2 != NULL){
+    if (comparar (iterador_lista1->dato, iterador_lista2->dato)){
+      resultado->sig = iterador_lista1;
+      iterador_lista1 = iterador_lista1->sig;
+      resultado = resultado->sig;
+    }
+    else {
+      resultado->sig = iterador_lista2;
+      iterador_lista2 = iterador_lista2->sig;
+      resultado = resultado->sig;
+    }
+  }
+
+  if (iterador_lista1 != NULL){
+    resultado->sig = iterador_lista1;
+  }
+  else {
+    resultado->sig = iterador_lista2;
+  }
+}
+
+void glist_dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
+  GNodo *iteradorLento = listaPrincipal;
+  // De esta forma, si la lista tiene un solo elemento, lo sabremos de inmediato
+  GNodo *iteradorRapido = listaPrincipal->sig;
+
+  while (iteradorRapido != NULL){
+    iteradorRapido = iteradorRapido->sig;
+    if (iteradorRapido != NULL){
+      iteradorRapido = iteradorRapido->sig;
+      iteradorLento = iteradorLento->sig;
+    }
+  }
+
+  *der = iteradorLento->sig;
+  *izq = listaPrincipal;
+  iteradorLento->sig = NULL;
+}
+
 void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento, Compara comparar, GList lista){
-  GList listaAOdenar = glist_cpy (lista);
+  GList listaAOdenar = glist_copiar_nodos (lista);
   listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
   glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida);
-  glist_destruir (&listaAOdenar, nada);
+  glist_liberar_nodos (&listaAOdenar);
 }
 
 GList glist_selection_sort (GList lista, Compara funcion){
@@ -177,7 +220,14 @@ void glist_destruir (GList *lista, Destruir funcion){
   }
 }
 
-void nada (void *dato){
-  dato = dato + 1;
-  dato = dato - 1;
+
+void glist_liberar_nodos (GList *lista){
+  GNodo *iterador = lista->inicio;
+  GNodo *libertador;
+
+  for (; iterador != NULL; ){
+    libertador = iterador;
+    iterador = iterador->sig;
+    free (libertador);
+  }
 }

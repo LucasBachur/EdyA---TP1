@@ -3,11 +3,6 @@
 
 #define forrapido(lista, iterador) for (GNodo *iterador = lista.inicio; iterador != NULL; iterador = iterador->sig)
 
-typedef struct {
-char *nombre;
-int edad;
-char *lugarDeNacimiento; // pais o capital
-} Persona;
 
 typedef struct _GNodo {
   void *dato;
@@ -48,10 +43,27 @@ void rest (GList lista);
 // Devuelve el ultimo elemento de una lista.
 GList last (GList lista);
 
+// Dada una lista, devuelve una nueva lista con nuevos nodos identicos.
+// Cabe recalcar, que los punteros a los datos siguen siendo los de la lista
+// original. Por lo tanto si se ven alterados en una lista o la otra, los
+// cambios se veran reflejados en ambas.
+GList glist_copiar_nodos (GList lista);
+
 void glist_intercambiar (GNodo *nodo1, GNodo *nodo2);
+
+void glist_mover (GList *lista, GNodo *antNodo1, GNodo *antNodo2);
+
+void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial);
 
 void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento,
   Compara comparar, GList lista);
+
+// Dadas dos nodos que representan sublistas, ordenadas, de una lista original,
+// la lista original y un metodo para comparar.
+// Modifica si es necesario el inicio y/o fin de la lista original.
+void glist_merge (GNodo **lista1, GNodo **lista2, Compara comparar);
+
+void glist_dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der);
 
 // Algoritmo de ordenamiento por insercion, toma una lista y una funcion de comparacion.
 // Devuelve la lista ordenada.
@@ -72,6 +84,9 @@ GList merge (GList left, GList right, Compara funcion);
 // personalizada para liberar tipo de dato que se este llevando en ella.
 void glist_destruir (GList *lista, Destruir funcion);
 
-void nada (void *dato);
+// Esta funcion solo libera los nodos de la lista, no libera los datos que hay
+// en cada nodo.
+void glist_liberar_nodos (GList *lista);
+
 
 #endif

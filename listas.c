@@ -5,22 +5,34 @@
 
 #define BUFFER 180
 
+typedef struct {
+char *nombre;
+int edad;
+char *lugarDeNacimiento; // pais o capital
+} Persona;
+
+// Dado un puntero a void.
+// Lo interpreta como persona, y libera los atributos 'nombre' y 'lugarDeNacimiento'
 void liberar_persona (void *persona){
   free (((Persona*)persona)->nombre);
   free (((Persona*)persona)->lugarDeNacimiento);
   free (persona);
 }
 
+// Dados dos punteros a void.
+// Los interpreta como personas y compara sus atributos 'edad'.
 int edad_mayor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
   return edad1 > edad2;
 }
 
-// Adaptar a nuestro caso particular.
+// Dado un dato como puntero a void, y un archivo abirto en modo de escritura.
+// Escribe el dato interpretandolo como persona.
 void imprimir_persona_archivo (void *dato, FILE *Archivo){
   fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
 }
+
 // Dado un nombre, una edad, y un pais. Devuelve un puntero a Persona que tiene
 // un solo elemento y sus datos son los que se pasaron a la funcion.
 Persona* crear_persona (char *nombre, int edad, char *pais){
@@ -67,14 +79,19 @@ int main (){
   GList prueba = glist_crear ();
 
   char *nombreArchivoEntrada = "salidas1.txt";
-  char *nombreArchivoSalida = "prueba.txt";
+  // char *nombreArchivoSalida = "prueba.txt";
 
   prueba = interpretar_archivo (nombreArchivoEntrada);
   printf ("Luego de interpretar archivo.\n");
-  // glist_imprimir_archivo (&prueba, imprimir_persona_archivo, nombreArchivoSalida);
+  GNodo *izq = NULL;
+  GNodo *der = NULL;
 
+  glist_dividir (prueba.inicio, &izq, &der);
+  glist_merge (&der, &izq, edad_mayor);
+  prueba.inicio = der;
+  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "mergeado.txt");
 
-  glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_insertion_sort, edad_mayor, prueba);
+  //glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_insertion_sort, edad_mayor, prueba);
 
 
   // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
