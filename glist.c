@@ -105,39 +105,45 @@ void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial){
 }
 
 
-void glist_merge (GNodo **lista1, GNodo **lista2, Compara comparar){
+void glist_merge (GNodo **izq, GNodo **der, Compara comparar){
   GNodo *resultado = NULL;
-  GNodo *iterador_lista1 = *lista1;
-  GNodo *iterador_lista2 = *lista2;
+  GNodo *iterador_izq = *izq;
+  GNodo *iterador_der = *der;
   // Primero se necesita decidir cual sera el comienzo de resultado.
-  if (comparar (iterador_lista1->dato, iterador_lista2->dato)){
-    resultado = iterador_lista1;
-    iterador_lista1 = iterador_lista1->sig;
+  if (comparar (iterador_izq->dato, iterador_der->dato)){
+    printf ("El nodo inicial es el de la izq\n");
+    resultado = iterador_izq;
+    iterador_izq = iterador_izq->sig;
   }
   else {
-    resultado = iterador_lista2;
-    lista1 = lista2; // De esta forma, lista 1 sera el comienzo de la lista mergeada total.
-    iterador_lista2 = iterador_lista2->sig;
+    printf ("El nodo inicial es el de la der\n");
+    resultado = iterador_der;
+    *izq = *der; // De esta forma, lista 1 sera el comienzo de la lista mergeada total.
+    iterador_der = iterador_der->sig;
   }
 
-  while (iterador_lista1 != NULL && iterador_lista2 != NULL){
-    if (comparar (iterador_lista1->dato, iterador_lista2->dato)){
-      resultado->sig = iterador_lista1;
-      iterador_lista1 = iterador_lista1->sig;
+  while (iterador_izq != NULL && iterador_der != NULL){
+    if (comparar (iterador_izq->dato, iterador_der->dato)){
+      printf ("El nodo siguiente es el de la izq\n");
+      resultado->sig = iterador_izq;
+      iterador_izq = iterador_izq->sig;
       resultado = resultado->sig;
     }
     else {
-      resultado->sig = iterador_lista2;
-      iterador_lista2 = iterador_lista2->sig;
+      printf ("El nodo siguiente es el de la der\n");
+      resultado->sig = iterador_der;
+      iterador_der = iterador_der->sig;
       resultado = resultado->sig;
     }
   }
 
-  if (iterador_lista1 != NULL){
-    resultado->sig = iterador_lista1;
+  if (iterador_izq != NULL){
+    printf ("Sobraron nodos de la izq\n");
+    resultado->sig = iterador_izq;
   }
   else {
-    resultado->sig = iterador_lista2;
+    printf ("Sobraron nodos de la der\n");
+    resultado->sig = iterador_der;
   }
 }
 

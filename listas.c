@@ -21,6 +21,13 @@ void liberar_persona (void *persona){
 
 // Dados dos punteros a void.
 // Los interpreta como personas y compara sus atributos 'edad'.
+int edad_menor (void *dato1, void *dato2){
+  int edad1 = ((Persona*)dato1)->edad;
+  int edad2 = ((Persona*)dato2)->edad;
+  return edad1 < edad2;
+}
+// Dados dos punteros a void.
+// Los interpreta como personas y compara sus atributos 'edad'.
 int edad_mayor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
@@ -87,11 +94,15 @@ int main (){
   GNodo *der = NULL;
 
   glist_dividir (prueba.inicio, &izq, &der);
-  glist_merge (&der, &izq, edad_mayor);
+  prueba.inicio = izq;
+  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "izq.txt");
   prueba.inicio = der;
+  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "der.txt");
+  glist_merge (&izq, &der, edad_menor);
+  prueba.inicio = izq;
   glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "mergeado.txt");
 
-  //glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_insertion_sort, edad_mayor, prueba);
+  //glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_insertion_sort, edad_menor, prueba);
 
 
   // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
