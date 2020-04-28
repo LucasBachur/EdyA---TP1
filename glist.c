@@ -67,10 +67,12 @@ GList glist_copiar_nodos (GList lista){
 
 // Funciona intercambiando datos.
 void glist_intercambiar (GNodo *nodo1, GNodo *nodo2){
-  void *datoAuxiliar = NULL;
-  datoAuxiliar = nodo1->dato;
-  nodo1->dato = nodo2->dato;
-  nodo2->dato = datoAuxiliar;
+  if (nodo1 != nodo2){
+    void *datoAuxiliar = NULL;
+    datoAuxiliar = nodo1->dato;
+    nodo1->dato = nodo2->dato;
+    nodo2->dato = datoAuxiliar;
+  }
 }
 
 void glist_mover (GList *lista, GNodo *antNodo1, GNodo *antNodo2){
@@ -105,32 +107,32 @@ void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial){
 }
 
 
-void glist_merge (GNodo **izq, GNodo **der, Compara comparar){
+void merge (GNodo **izq, GNodo **der, Compara comparar){
   GNodo *resultado = NULL;
   GNodo *iterador_izq = *izq;
   GNodo *iterador_der = *der;
   // Primero se necesita decidir cual sera el comienzo de resultado.
-  if (comparar (iterador_izq->dato, iterador_der->dato)){
-    printf ("El nodo inicial es el de la izq\n");
-    resultado = iterador_izq;
-    iterador_izq = iterador_izq->sig;
-  }
-  else {
-    printf ("El nodo inicial es el de la der\n");
+  if (!comparar (iterador_izq->dato, iterador_der->dato)){
+  //  printf ("El nodo inicial es el de la der\n");
     resultado = iterador_der;
     *izq = *der; // De esta forma, lista 1 sera el comienzo de la lista mergeada total.
     iterador_der = iterador_der->sig;
   }
+  else {
+  //  printf ("El nodo inicial es el de la izq\n");
+    resultado = iterador_izq;
+    iterador_izq = iterador_izq->sig;
+  }
 
   while (iterador_izq != NULL && iterador_der != NULL){
     if (comparar (iterador_izq->dato, iterador_der->dato)){
-      printf ("El nodo siguiente es el de la izq\n");
+  //    printf ("El nodo siguiente es el de la izq\n");
       resultado->sig = iterador_izq;
       iterador_izq = iterador_izq->sig;
       resultado = resultado->sig;
     }
     else {
-      printf ("El nodo siguiente es el de la der\n");
+  //    printf ("El nodo siguiente es el de la der\n");
       resultado->sig = iterador_der;
       iterador_der = iterador_der->sig;
       resultado = resultado->sig;
@@ -138,16 +140,16 @@ void glist_merge (GNodo **izq, GNodo **der, Compara comparar){
   }
 
   if (iterador_izq != NULL){
-    printf ("Sobraron nodos de la izq\n");
+  //  printf ("Sobraron nodos de la izq\n");
     resultado->sig = iterador_izq;
   }
   else {
-    printf ("Sobraron nodos de la der\n");
+  //  printf ("Sobraron nodos de la der\n");
     resultado->sig = iterador_der;
   }
 }
 
-void glist_dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
+void dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
   GNodo *iteradorLento = listaPrincipal;
   // De esta forma, si la lista tiene un solo elemento, lo sabremos de inmediato
   GNodo *iteradorRapido = listaPrincipal->sig;
@@ -213,6 +215,31 @@ GList glist_insertion_sort (GList lista, Compara funcion){
   }
   return lista;
 }
+
+GNodo* merge_sort (GNodo *comienzo, Compara funcion){
+  GNodo *izq = NULL;
+  GNodo *der = NULL;
+
+  if (comienzo != NULL && comienzo->sig != NULL){
+    dividir (comienzo, &izq, &der);
+
+    izq = merge_sort (izq, funcion);
+    der = merge_sort (der, funcion);
+
+    merge (&izq, &der, funcion);
+    comienzo = izq;
+  }
+  return comienzo;
+}
+
+GList glist_merge_sort (GList lista, Compara funcion){
+  lista.inicio = merge_sort (lista.inicio, funcion);
+  GNodo *iterador = lista.inicio;
+  for (; iterador->sig != NULL; iterador = iterador->sig);
+  lista.final = iterador;
+  return lista;
+}
+
 
 void glist_destruir (GList *lista, Destruir funcion){
   GNodo *iterador = lista->inicio;

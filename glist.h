@@ -61,24 +61,26 @@ void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_im
 // Dadas dos nodos que representan sublistas, ordenadas, de una lista original,
 // la lista original y un metodo para comparar.
 // Modifica si es necesario el inicio y/o fin de la lista original.
-void glist_merge (GNodo **lista1, GNodo **lista2, Compara comparar);
+void merge (GNodo **lista1, GNodo **lista2, Compara comparar);
 
-void glist_dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der);
-
-// Algoritmo de ordenamiento por insercion, toma una lista y una funcion de comparacion.
-// Devuelve la lista ordenada.
-GList glist_insertion_sort (GList lista, Compara funcion);
+void dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der);
 
 // Algoritmo de ordenamiento por seleccion, toma una lista y una funcion de comparacion.
 // Devuelve la lista ordenada.
 GList glist_selection_sort (GList lista, Compara funcion);
 
+// Algoritmo de ordenamiento por insercion, toma una lista y una funcion de comparacion.
+// Devuelve la lista ordenada.
+GList glist_insertion_sort (GList lista, Compara funcion);
+
+GNodo* merge_sort (GNodo *comienzo, Compara funcion);
+
 // Algoritmo de ordenamiento por mezcla, toma una lista y una funcion de comparacion.
 // Devuelve la lista ordenada.
 GList glist_merge_sort (GList lista, Compara funcion);
 
-// Toma dos listas y las combina de acuerdo a un critero de comparacion.
-GList merge (GList left, GList right, Compara funcion);
+
+
 
 // Dada una lista enlazada, libera la lista y utiliza una funcion Destruir
 // personalizada para liberar tipo de dato que se este llevando en ella.

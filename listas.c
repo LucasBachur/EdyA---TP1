@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "glist.h"
 
 #define BUFFER 180
@@ -24,14 +25,15 @@ void liberar_persona (void *persona){
 int edad_menor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
-  return edad1 < edad2;
+
+  return edad1 <= edad2;
 }
 // Dados dos punteros a void.
 // Los interpreta como personas y compara sus atributos 'edad'.
 int edad_mayor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
-  return edad1 > edad2;
+  return edad1 >= edad2;
 }
 
 // Dado un dato como puntero a void, y un archivo abirto en modo de escritura.
@@ -82,29 +84,56 @@ GList interpretar_archivo (char *nombreArchivoEntrada){
 
 
 
+
+
 int main (){
   GList prueba = glist_crear ();
 
   char *nombreArchivoEntrada = "salidas1.txt";
-  // char *nombreArchivoSalida = "prueba.txt";
+  // char *nombreArchivoSalida1 = "AAinsercion.txt";
+  // char *nombreArchivoSalida2 = "AAselection.txt";
+  char *nombreArchivoSalida3 = "AAmergesort.txt";
 
   prueba = interpretar_archivo (nombreArchivoEntrada);
   printf ("Luego de interpretar archivo.\n");
-  GNodo *izq = NULL;
-  GNodo *der = NULL;
 
-  glist_dividir (prueba.inicio, &izq, &der);
-  prueba.inicio = izq;
-  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "izq.txt");
-  prueba.inicio = der;
-  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "der.txt");
-  glist_merge (&izq, &der, edad_menor);
-  prueba.inicio = izq;
-  glist_imprimir_archivo (&prueba, imprimir_persona_archivo, "mergeado.txt");
+  clock_t begin = clock();
+  glist_ordenar_archivar (nombreArchivoSalida3, imprimir_persona_archivo, glist_merge_sort, edad_menor, prueba);
+  clock_t end = clock();
+  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  printf ("Merge: |%lf|\n", time_spent);
 
-  //glist_ordenar_archivar (nombreArchivoSalida, imprimir_persona_archivo, glist_insertion_sort, edad_menor, prueba);
+
+  // begin = clock();
+  // glist_ordenar_archivar (nombreArchivoSalida1, imprimir_persona_archivo, glist_insertion_sort, edad_menor, prueba);
+  // end = clock();
+  // time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  // printf ("Insertion: |%lf|\n", time_spent);
+
+
+
+  // begin = clock();
+  // glist_ordenar_archivar (nombreArchivoSalida2, imprimir_persona_archivo, glist_selection_sort, edad_menor, prueba);
+  // end = clock();
+  // time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  // printf ("Selection: |%lf|\n", time_spent);
+
+
 
 
   // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
-  glist_destruir(&prueba,liberar_persona);
+  glist_destruir (&prueba,liberar_persona);
 }
+
+/*
+FALTA:
+  1) Comentar codigo.
+  2) Errores de valgrind de generacion.
+  3) Informe.
+  4) Revisar algoritmos.
+  5) Probar en la compu de bachur.
+  6) Convenciones de codigo.
+  7) Archivo de persona?
+  8) Hacer carpetas para embellecer.
+
+*/
