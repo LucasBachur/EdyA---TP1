@@ -14,8 +14,6 @@
 // y la cant de elementos a generar.
 int main (int argc, char **argv){
   assert (argc == 5);
-  // Cambiando la semilla de generacion.
-  srand (time(NULL));
   int cant = atoi(argv[4]);
   int bandera1 = 1, bandera2 = 2, bandera3 = 3, retorno = 0;
 

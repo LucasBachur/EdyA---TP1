@@ -54,7 +54,7 @@ int numero_random_w (int longArchivo){
   srand (time (NULL));
   int a = rand ();
   printf ("Primer random: |%d|, ", a);
-  srand (time (NULL + 1));
+  srand (time (NULL)+1);
   int b = rand ();
   printf ("Segundo random: |%d|, ", b);
   return (a * b) % (longArchivo + 1);
