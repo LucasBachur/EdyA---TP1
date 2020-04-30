@@ -11,30 +11,103 @@
 
 #define BUFFER 80
 
+ARandom* posiciones_aleatorias (int cant, int longArchivo){
+  ARandom *arregloRand = malloc (sizeof (ARandom) * (cant + 1));
+  for (int i = 0; i < cant; ++i){
+    arregloRand[i].numLinea = -1;
+    arregloRand[i].pos = -1;
+  }
+  int nRandom;
+  int os;
+  sistema_operativo (&os);
 
-// Dado un archivo contenedor de los nombres, y la cantidad de nombres a extraer
-// Genera un arreglo con dichos nombres.
-char **generar_arreglo (char *nombre_archivo, int cant, int *bandera, int longitud_archivo){
+  // Rellenando el arreglo a devolver.
+  for (int j = 1; j <= cant; ++j){
+    // Creando numero aleatorio.
+    nRandom = generar_numero_random (os, longArchivo);
+    // Actualizando el maximo.
+    if (arregloRand[0].numLinea < nRandom){
+      arregloRand[0].numLinea = nRandom;
+      arregloRand[0].pos = -1;
+    }
+    // Actualizando el arreglo.
+    arregloRand[j].numLinea = nRandom;
+    arregloRand[j].pos = j - 1;
+  }
+  return arregloRand;
+}
+
+void sistema_operativo (int *band){
+  #ifdef _WIN32
+    *band = 0;
+    #elif __linux__
+      srand (time (NULL));
+      *band = 1;
+  #endif
+}
+
+int numero_random_l (int longArchivo){
+  return rand () % (longArchivo + 1);
+}
+
+int numero_random_w (int longArchivo){
+  srand (time (NULL));
+  int a = rand ();
+  printf ("Primer random: |%d|, ", a);
+  srand (time (NULL + 1));
+  int b = rand ();
+  printf ("Segundo random: |%d|, ", b);
+  return (a * b) % (longArchivo + 1);
+}
+
+int generar_numero_random (int band, int longArchivo){
+  int devolver;
+  switch (band) {
+    case 0:
+      devolver = numero_random_w (longArchivo);
+      break;
+    case 1:
+      devolver = numero_random_l (longArchivo);
+      break;
+    default:
+      devolver = numero_random_l (longArchivo);
+  }
+  return devolver;
+}
+
+int ARandom_mayor (const void *dato1, const void *dato2){
+  int devolver = -1;
+
+  if (((ARandom*)dato1)->numLinea > ((ARandom*)dato2)->numLinea)
+    devolver = 1;
+
+  return devolver;
+}
+
+char **generar_arreglo (char *nombreArchivoE, int cant, int *bandera, int longArchivo){
   // Creando el arreglo a devolver.
-  char **arreglo_nombres = malloc (sizeof (char*) * cant);
+  char **arregloNombres = malloc (sizeof (char*) * cant);
   for (int i = 0; i < cant; ++i)
-    arreglo_nombres[i] = malloc (sizeof (char) * BUFFER);
+    arregloNombres[i] = malloc (sizeof (char) * BUFFER);
 
-  // Arreglo que tendra las lineas
-  ARandom *array_posiciones = posiciones_aleatorias(cant, longitud_archivo);
-  // se hace en +1 porque el primero tiene el mas grande repetido
-  qsort (array_posiciones + 1, cant, sizeof(ARandom), mayor);
-  FILE *Archivo = fopen (nombre_archivo, "r");
+  // Arreglo que tendra los numeros de lineas.
+  ARandom *arrayPos = posiciones_aleatorias(cant, longArchivo);
+  // se hace en +1 porque el primero tiene el mas grande repetido y no nos
+  // interesa ordenarlo.
+  qsort (arrayPos + 1, cant, sizeof(ARandom), ARandom_mayor);
+  FILE *Archivo = fopen (nombreArchivoE, "r");
+  // si se abrio correctamente...
   if (Archivo != NULL){
-    // manipular el Archivo
     char buffer[BUFFER];
-    for (int i = 0, elto = 1; i <= array_posiciones[0].num_linea; ++i){
+    // colocados comienza desde 1 pues queremos saltear el primer elemento de
+    // arrayPos.
+    for (int i = 0, colocados = 1; i <= arrayPos[0].numLinea; ++i){
       fscanf (Archivo, "%[^\r\n]\r\n", buffer);
       // Si la linea que almaceno el buffer, es de las que nos interesa
-      // entonces la guardamos en el arreglo_nombres.
-      while (i == array_posiciones[elto].num_linea){
-        strcpy (arreglo_nombres[array_posiciones[elto].pos], buffer);
-        ++elto;
+      // entonces la guardamos en el arregloNombres.
+      while (colocados < cant + 1 && i == arrayPos[colocados].numLinea){
+        strcpy (arregloNombres[arrayPos[colocados].pos], buffer);
+        ++colocados;
       }
     }
     // Se modifica la bandera, indicando que el archivo se manipulo bien.
@@ -43,61 +116,23 @@ char **generar_arreglo (char *nombre_archivo, int cant, int *bandera, int longit
   else{
     printf ("No se pudo abrir el archivo de extracion de datos.\n");
   }
-  free (array_posiciones);
+  free (arrayPos);
   fclose (Archivo);
-  return arreglo_nombres;
-}
-
-int mayor (const void *dato1, const void *dato2){
-  int devolver = -1;
-
-  if (((ARandom*)dato1)->num_linea > ((ARandom*)dato2)->num_linea)
-    devolver = 1;
-
-  return devolver;
-}
-
-// Dada una cantidad, y la longitud del archivo del que se quieren extraer
-// datos.
-// Devuelve un arreglo del tipo ARandom cuya primer posicion, contiene
-// el elemento con el mayor num_linea, y a partir de ahi, los demas elementos,
-// se completan con un num_linea aleatorio, y su posicion en orden creciente,
-// es decir, se guarda el orden original en el que salieron los aleatorios.
-ARandom* posiciones_aleatorias (int cant, int longitud_archivo){
-  ARandom *arreglo_rand = malloc (sizeof (ARandom) * (cant + 1));
-  for (int i = 0; i < cant; ++i){
-    arreglo_rand[i].num_linea = -1;
-    arreglo_rand[i].pos = -1;
-  }
-  int n_random;
-  // Rellenando el arreglo a devolver.
-  for (int j = 1; j <= cant; ++j){
-    // Creando numero aleatorio.
-    n_random = rand() % (longitud_archivo + 1);
-    // Actualizando el maximo.
-    if (arreglo_rand[0].num_linea < n_random){
-      arreglo_rand[0].num_linea = n_random;
-      arreglo_rand[0].pos = -1;
-    }
-    // Actualizando el arreglo.
-    arreglo_rand[j].num_linea = n_random;
-    arreglo_rand[j].pos = j - 1;
-  }
-  return arreglo_rand;
+  return arregloNombres;
 }
 
 int generar_edad (){
   return(rand() % 100) + 1;
 }
 
-void escribir_archivo (char **arreglo_nombres, char **arreglo_paises, int cant_lineas, char *nombre_archivo, int *bandera){
-  int edad;
-  FILE *Archivo_salida = fopen(nombre_archivo, "w");
+void escribir_archivo (char **arregloNombres, char **arregloPaises, int cantLineas, char *nombreArchivoS, int *bandera){
+  FILE *archivoSalida = fopen(nombreArchivoS, "w");
   // Si el archivo se abrio correctamente...
-  if (Archivo_salida != NULL){
-    for (int i = 0; i < cant_lineas; ++i){
+  if (archivoSalida != NULL){
+    int edad;
+    for (int i = 0; i < cantLineas; ++i){
       edad = generar_edad ();
-      fprintf (Archivo_salida,"%s, %d, %s\n", arreglo_nombres[i], edad, arreglo_paises[i]);
+      fprintf (archivoSalida,"%s, %d, %s\n", arregloNombres[i], edad, arregloPaises[i]);
     }
     // Se modifica la bandera, indicando que el archivo se uso correctamente.
     *bandera = 0;
@@ -105,7 +140,7 @@ void escribir_archivo (char **arreglo_nombres, char **arreglo_paises, int cant_l
   else {
     printf("No se pudo abrir el archivo de escritura\n");
   }
-  fclose (Archivo_salida);
+  fclose (archivoSalida);
 }
 
 void destruir_arraybi (char **array, int longitud){
@@ -114,19 +149,3 @@ void destruir_arraybi (char **array, int longitud){
   }
   free (array);
 }
-
-/*
-Notas:
-1-  Alternativas para, dejar el tamano de buffer y usar fscanf vs usar getc y
-  asignar precisamente el tamano de los elementos de arreglo_nombres.
-  Ver si conviene ajustar el tamano de cada elemento de arreglo_nombres con
-  un strlen.
-
-2-  Como deshacernos del printf ("%d", argc);.
-
-3-  Diferencia entre const void y void?
-
-4-  Solucionar errores de valgrind.
-
-5- No tenemos problemas con los caracteres especiales (? (???????
-*/

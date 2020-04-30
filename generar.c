@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <assert.h>
 #include "generacion.h"
 
 
@@ -12,7 +13,7 @@
 // Al main le vamos a pasar, el nobmre del archivo base, el de salida
 // y la cant de elementos a generar.
 int main (int argc, char **argv){
-  printf ("%d\n", argc);
+  assert (argc == 5);
   // Cambiando la semilla de generacion.
   srand (time(NULL));
   int cant = atoi(argv[4]);

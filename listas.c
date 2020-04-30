@@ -90,8 +90,8 @@ int main (){
   GList prueba = glist_crear ();
 
   char *nombreArchivoEntrada = "salidas1.txt";
-  // char *nombreArchivoSalida1 = "AAinsercion.txt";
-  // char *nombreArchivoSalida2 = "AAselection.txt";
+  char *nombreArchivoSalida1 = "AAinsercion.txt";
+  char *nombreArchivoSalida2 = "AAselection.txt";
   char *nombreArchivoSalida3 = "AAmergesort.txt";
 
   prueba = interpretar_archivo (nombreArchivoEntrada);
@@ -104,19 +104,19 @@ int main (){
   printf ("Merge: |%lf|\n", time_spent);
 
 
-  // begin = clock();
-  // glist_ordenar_archivar (nombreArchivoSalida1, imprimir_persona_archivo, glist_insertion_sort, edad_menor, prueba);
-  // end = clock();
-  // time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-  // printf ("Insertion: |%lf|\n", time_spent);
+  begin = clock();
+  glist_ordenar_archivar (nombreArchivoSalida1, imprimir_persona_archivo, glist_insertion_sort, edad_menor, prueba);
+  end = clock();
+  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  printf ("Insertion: |%lf|\n", time_spent);
 
 
 
-  // begin = clock();
-  // glist_ordenar_archivar (nombreArchivoSalida2, imprimir_persona_archivo, glist_selection_sort, edad_menor, prueba);
-  // end = clock();
-  // time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-  // printf ("Selection: |%lf|\n", time_spent);
+  begin = clock();
+  glist_ordenar_archivar (nombreArchivoSalida2, imprimir_persona_archivo, glist_selection_sort, edad_menor, prueba);
+  end = clock();
+  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  printf ("Selection: |%lf|\n", time_spent);
 
 
 
