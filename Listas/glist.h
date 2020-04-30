@@ -32,7 +32,7 @@ void glist_agregar_inicio (GList *lista, void* dato);
 // al anterior puntero de la lista.
 void glist_agregar_final (GList *lista, void* dato);
 
-void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida);
+void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida, double tiempo);
 
 // Devuelve el primer elemento de una lista.
 GList first (GList lista);

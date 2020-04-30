@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <assert.h>
 #include "glist.h"
 
 #define BUFFER 180
@@ -26,14 +26,14 @@ int edad_menor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
 
-  return edad1 <= edad2;
+  return edad1 < edad2;
 }
-// Dados dos punteros a void.
-// Los interpreta como personas y compara sus atributos 'edad'.
-int edad_mayor (void *dato1, void *dato2){
-  int edad1 = ((Persona*)dato1)->edad;
-  int edad2 = ((Persona*)dato2)->edad;
-  return edad1 >= edad2;
+
+int largo_nombre_menor (void *dato1, void *dato2){
+  int largo1 = strlen (((Persona*)dato1)->nombre);
+  int largo2 = strlen (((Persona*)dato2)->nombre);
+
+  return largo1 < largo2;
 }
 
 // Dado un dato como puntero a void, y un archivo abirto en modo de escritura.
@@ -71,14 +71,10 @@ GList interpretar_archivo (char *nombreArchivoEntrada){
       // Agreando a persona a la lista.
       glist_agregar_final (&listaInterpretada, personaAlegre);
     }
-    if (feof(Archivo)){
-      printf ("Se leyo correctamente el archivo.\n");
-    }
   }else{
     printf ("Archivo para generar lista fallo.\n");
   }
   fclose (Archivo);
-  printf ("Archivo cerrado, lista creada.\n");
   return listaInterpretada;
 }
 
@@ -86,54 +82,36 @@ GList interpretar_archivo (char *nombreArchivoEntrada){
 
 
 
-int main (){
-  GList prueba = glist_crear ();
+int main (int argc, char **argv){
+  assert (argc == 2);
 
-  char *nombreArchivoEntrada = "salidas1.txt";
-  char *nombreArchivoSalida1 = "AAinsercion.txt";
-  char *nombreArchivoSalida2 = "AAselection.txt";
-  char *nombreArchivoSalida3 = "AAmergesort.txt";
+  GList lista = glist_crear ();
 
-  prueba = interpretar_archivo (nombreArchivoEntrada);
-  printf ("Luego de interpretar archivo.\n");
+  char nombreArchivoEntrada[80] = "Listas/";
+  strcat (nombreArchivoEntrada, argv[1]);
 
-  clock_t begin = clock();
-  glist_ordenar_archivar (nombreArchivoSalida3, imprimir_persona_archivo, glist_merge_sort, edad_menor, prueba);
-  clock_t end = clock();
-  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-  printf ("Merge: |%lf|\n", time_spent);
+  lista = interpretar_archivo (nombreArchivoEntrada);
 
+  glist_ordenar_archivar ("Edad_menor_mergesort", imprimir_persona_archivo, glist_merge_sort, edad_menor, lista);
 
-  begin = clock();
-  glist_ordenar_archivar (nombreArchivoSalida1, imprimir_persona_archivo, glist_insertion_sort, edad_menor, prueba);
-  end = clock();
-  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-  printf ("Insertion: |%lf|\n", time_spent);
+  glist_ordenar_archivar ("Edad_menor_insertion", imprimir_persona_archivo, glist_insertion_sort, edad_menor, lista);
 
+  glist_ordenar_archivar ("Edad_menor_selection", imprimir_persona_archivo, glist_selection_sort, edad_menor, lista);
 
+  glist_ordenar_archivar ("Largo_nombre_menor_mergesort", imprimir_persona_archivo, glist_merge_sort, largo_nombre_menor, lista);
 
-  begin = clock();
-  glist_ordenar_archivar (nombreArchivoSalida2, imprimir_persona_archivo, glist_selection_sort, edad_menor, prueba);
-  end = clock();
-  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-  printf ("Selection: |%lf|\n", time_spent);
+  glist_ordenar_archivar ("Largo_nombre_menor_insertion", imprimir_persona_archivo, glist_insertion_sort, largo_nombre_menor, lista);
 
+  glist_ordenar_archivar ("Largo_nombre_menor_selection", imprimir_persona_archivo, glist_selection_sort, largo_nombre_menor, lista);
 
-
-
-  // printf("%d %d",*(int*)(first(prueba).inicio->dato),*(int*)(last(prueba).inicio->dato));
-  glist_destruir (&prueba,liberar_persona);
+  glist_destruir (&lista,liberar_persona);
 }
 
 /*
 FALTA:
   1) Comentar codigo.
-  2) Errores de valgrind de generacion.
   3) Informe.
   4) Revisar algoritmos.
-  5) Probar en la compu de bachur.
   6) Convenciones de codigo.
   7) Archivo de persona?
-  8) Hacer carpetas para embellecer.
-
 */

@@ -6,13 +6,21 @@ typedef struct _random{
   int pos;
 } ARandom;
 
+
+// Dado un puntero a enteros, de una bandera, devuelve:
+// 0 si se esta en windows.
+// 1 si se esta en linux.
 void sistema_operativo (int *band);
 
-int numero_random_l (int longArchivo);
+// En linux, genera un numero random entre 0 y el tope.
+int numero_random_l (int tope);
 
-int numero_random_w (int longArchivo);
+// En windows, genera un numero random entre 0 y el tope.
+int numero_random_w (int tope);
 
-int generar_numero_random (int band, int longArchivo);
+// Dada una bandera, que indica en que sistema operativo nos encontramos,
+// y un tope, genera un numero random entre 0 y el tope.
+int generar_numero_random (int band, int tope);
 
 // Dada una cantidad, y la longitud del archivo del que se quieren extraer
 // datos.
@@ -20,9 +28,6 @@ int generar_numero_random (int band, int longArchivo);
 // Este cada elemento tendra un numero aleatorio de linea, y la posicion en la
 // que salio este elemento. El primer elemento tiene el maximo numero de linea.
 ARandom* posiciones_aleatorias (int cant, int longArchivo);
-
-int numero_random_w ();
-
 
 // Funcion especifica para el qsort.
 // Dados 2 datos ARandom, devuelve 1 si el num_linea del primero es mayor que el

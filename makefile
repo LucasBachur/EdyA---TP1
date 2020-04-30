@@ -6,16 +6,15 @@ programa1: generacion.o generar.o
 programa2: listas.o glist.o 
 	gcc -o programa2.out listas.o glist.o
 
-generar.o: generar.c
-	gcc -Wall -Werror -Wextra -g -c generar.c
+generar.o: Generacion/generar.c
+	gcc -Wall -Werror -Wextra -g -c Generacion/generar.c
 
-generacion.o: generacion.c generacion.h
-	gcc -Wall -Werror -Wextra -g -c generacion.c
+generacion.o: Generacion/generacion.c Generacion/generacion.h
+	gcc -Wall -Werror -Wextra -g -c Generacion/generacion.c
 
+listas.o: Listas/listas.c
+	gcc -Wall -Werror -Wextra -g -c Listas/listas.c
 
-listas.o: listas.c
-	gcc -Wall -Werror -Wextra -g -c listas.c
-
-glist.o: glist.c glist.h
-	gcc -Wall -Werror -Wextra -g -c glist.c
+glist.o: Listas/glist.c Listas/glist.h
+	gcc -Wall -Werror -Wextra -g -c Listas/glist.c
 	

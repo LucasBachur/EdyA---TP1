@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "glist.h"
+#include <time.h>
 
 
 GList glist_crear (){
@@ -35,10 +36,12 @@ void glist_agregar_final (GList *lista, void *dato){
   }
 }
 
-void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida){
+void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida, double tiempo){
   FILE *Archivo = fopen (nombreArchivoSalida, "w");
-  printf ("\nComienzo de funcion ImprimirArchivo\n");
   if (Archivo != NULL){
+    if (tiempo != -1) {
+      fprintf (Archivo, "Tiempo de ordenamiento: |%lf|\n\n", tiempo);
+    }
     GNodo *iterador = lista->inicio;
 
     while (iterador != NULL){
@@ -169,8 +172,13 @@ void dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
 
 void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento, Compara comparar, GList lista){
   GList listaAOdenar = glist_copiar_nodos (lista);
+
+  clock_t begin = clock();
   listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
-  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida);
+  clock_t end = clock();
+  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida, time_spent);
   glist_liberar_nodos (&listaAOdenar);
 }
 

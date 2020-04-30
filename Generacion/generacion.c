@@ -11,6 +11,45 @@
 
 #define BUFFER 80
 
+void sistema_operativo (int *band){
+  #ifdef _WIN32
+    *band = 0;
+    #elif __linux__
+      srand (time (NULL));
+      *band = 1;
+  #endif
+}
+
+int numero_random_l (int tope){
+  return rand () % (tope + 1);
+}
+
+int numero_random_w (int tope){
+  srand (time (NULL));
+  int a = rand ();
+  printf ("Primer random: |%d|, ", a);
+  srand (time (NULL));
+  int b = rand ();
+  printf ("Segundo random: |%d|, ", b);
+  return (a * b) % (tope + 1);
+}
+
+int generar_numero_random (int band, int tope){
+  int devolver;
+  // Lo hicimos con switch por si se quisieran agreagar mas sistemas operativos.
+  switch (band) {
+    case 0:
+      devolver = numero_random_w (tope);
+      break;
+    case 1:
+      devolver = numero_random_l (tope);
+      break;
+    default:
+      devolver = numero_random_l (tope);
+  }
+  return devolver;
+}
+
 ARandom* posiciones_aleatorias (int cant, int longArchivo){
   ARandom *arregloRand = malloc (sizeof (ARandom) * (cant + 1));
   for (int i = 0; i < cant; ++i){
@@ -35,44 +74,6 @@ ARandom* posiciones_aleatorias (int cant, int longArchivo){
     arregloRand[j].pos = j - 1;
   }
   return arregloRand;
-}
-
-void sistema_operativo (int *band){
-  #ifdef _WIN32
-    *band = 0;
-    #elif __linux__
-      srand (time (NULL));
-      *band = 1;
-  #endif
-}
-
-int numero_random_l (int longArchivo){
-  return rand () % (longArchivo + 1);
-}
-
-int numero_random_w (int longArchivo){
-  srand (time (NULL));
-  int a = rand ();
-  printf ("Primer random: |%d|, ", a);
-  srand (time (NULL + 1));
-  int b = rand ();
-  printf ("Segundo random: |%d|, ", b);
-  return (a * b) % (longArchivo + 1);
-}
-
-int generar_numero_random (int band, int longArchivo){
-  int devolver;
-  switch (band) {
-    case 0:
-      devolver = numero_random_w (longArchivo);
-      break;
-    case 1:
-      devolver = numero_random_l (longArchivo);
-      break;
-    default:
-      devolver = numero_random_l (longArchivo);
-  }
-  return devolver;
 }
 
 int ARandom_mayor (const void *dato1, const void *dato2){
@@ -122,7 +123,7 @@ char **generar_arreglo (char *nombreArchivoE, int cant, int *bandera, int longAr
 }
 
 int generar_edad (){
-  return(rand() % 100) + 1;
+  return (rand() % 100) + 1;
 }
 
 void escribir_archivo (char **arregloNombres, char **arregloPaises, int cantLineas, char *nombreArchivoS, int *bandera){
