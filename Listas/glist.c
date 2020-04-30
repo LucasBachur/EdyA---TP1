@@ -54,12 +54,6 @@ void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreA
   fclose (Archivo);
 }
 
-
-
-// Dada una lista, devuelve una nueva lista con nuevos nodos identicos.
-// Cabe recalcar, que los punteros a los datos siguen siendo los de la lista
-// original. Por lo tanto si se ven alterados en una lista o la otra, los
-// cambios se veran reflejados en ambas.
 GList glist_copiar_nodos (GList lista){
   GList nuevaLista = glist_crear ();
   forrapido (lista, iterador){
@@ -68,7 +62,6 @@ GList glist_copiar_nodos (GList lista){
   return nuevaLista;
 }
 
-// Funciona intercambiando datos.
 void glist_intercambiar (GNodo *nodo1, GNodo *nodo2){
   if (nodo1 != nodo2){
     void *datoAuxiliar = NULL;
@@ -109,6 +102,17 @@ void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial){
     lista->final = antNodo2;
 }
 
+void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento, Compara comparar, GList lista){
+  GList listaAOdenar = glist_copiar_nodos (lista);
+
+  clock_t begin = clock();
+  listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
+  clock_t end = clock();
+  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida, time_spent);
+  glist_liberar_nodos (&listaAOdenar);
+}
 
 void merge (GNodo **izq, GNodo **der, Compara comparar){
   GNodo *resultado = NULL;
@@ -170,18 +174,6 @@ void dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
   iteradorLento->sig = NULL;
 }
 
-void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento, Compara comparar, GList lista){
-  GList listaAOdenar = glist_copiar_nodos (lista);
-
-  clock_t begin = clock();
-  listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
-  clock_t end = clock();
-  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-
-  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida, time_spent);
-  glist_liberar_nodos (&listaAOdenar);
-}
-
 GList glist_selection_sort (GList lista, Compara funcion){
   GNodo *iterador1 = lista.inicio;
   GNodo *iterador2 = NULL;
@@ -240,15 +232,6 @@ GNodo* merge_sort (GNodo *comienzo, Compara funcion){
   return comienzo;
 }
 
-GList glist_merge_sort (GList lista, Compara funcion){
-  lista.inicio = merge_sort (lista.inicio, funcion);
-  GNodo *iterador = lista.inicio;
-  for (; iterador->sig != NULL; iterador = iterador->sig);
-  lista.final = iterador;
-  return lista;
-}
-
-
 void glist_destruir (GList *lista, Destruir funcion){
   GNodo *iterador = lista->inicio;
   GNodo *libertador;
@@ -261,6 +244,13 @@ void glist_destruir (GList *lista, Destruir funcion){
   }
 }
 
+GList glist_merge_sort (GList lista, Compara funcion){
+  lista.inicio = merge_sort (lista.inicio, funcion);
+  GNodo *iterador = lista.inicio;
+  for (; iterador->sig != NULL; iterador = iterador->sig);
+  lista.final = iterador;
+  return lista;
+}
 
 void glist_liberar_nodos (GList *lista){
   GNodo *iterador = lista->inicio;
