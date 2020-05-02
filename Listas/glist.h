@@ -69,8 +69,8 @@ void glist_intercambiar (GNodo *nodo1, GNodo *nodo2);
 void glist_mover (GList *lista, GNodo *antNodo1, GNodo *antNodo2);
 
 // Dados un puntero a GList y dos nodos de esta (siendo el primero el nodo 
-// inicial), mueve el segundo al comienzo de la lista (eliminandolo de 
-// su posicion original) y cambia la GList.
+// inicial), mueve el siguiente al segundo al comienzo de la lista (eliminandolo
+// de su posicion original) y cambia la GList.
 // glist_mover_pos0: GList* GNodo* GNodo* ->
 void glist_mover_pos0 (GList *lista, GNodo *nodoInicial, GNodo *antNodo2);
 

@@ -12,16 +12,19 @@ GList glist_crear (){
 }
 
 void glist_agregar_inicio (GList *lista, void *dato){
+  // Creando el nodo.
   GNodo *nuevoNodo = malloc (sizeof (GNodo));
   nuevoNodo->dato = dato;
   nuevoNodo->sig = lista->inicio;
+  // Si la lista es vacia se cambia el elemento de final de la GList.
   if (lista->inicio == NULL)
     lista->final = nuevoNodo;
+  // Se cambia el elemento de inicio de la GList.
   lista->inicio = nuevoNodo;
 }
 
 void glist_agregar_final (GList *lista, void *dato){
-  // creando Nodo.
+  // Creando nodo.
   GNodo *nuevoNodo = malloc (sizeof (GNodo));
   nuevoNodo->dato = dato;
   nuevoNodo->sig = NULL;
@@ -36,17 +39,19 @@ void glist_agregar_final (GList *lista, void *dato){
   }
 }
 
-void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion, char *nombreArchivoSalida, double tiempo){
+void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion,
+ char *nombreArchivoSalida, double tiempo){
   FILE *Archivo = fopen (nombreArchivoSalida, "w");
   if (Archivo != NULL){
+    // Si se abrio el archivo correctamente...
     if (tiempo != -1) {
+      // Si se le paso un tiempo valido lo imprime.
       fprintf (Archivo, "Tiempo de ordenamiento: |%lf|\n\n", tiempo);
     }
-    GNodo *iterador = lista->inicio;
 
-    while (iterador != NULL){
+    // Aplicamos la funcion de impresion a cada dato de la lista.
+    forrapido (*lista, iterador){
       funcion (iterador->dato, Archivo);
-      iterador = iterador->sig;
     }
   }else{
     printf ("Archivo de escritura fallo.\n");
@@ -63,18 +68,20 @@ GList glist_copiar_nodos (GList lista){
 }
 
 void glist_intercambiar (GNodo *nodo1, GNodo *nodo2){
-  if (nodo1 != nodo2){
-    void *datoAuxiliar = NULL;
-    datoAuxiliar = nodo1->dato;
-    nodo1->dato = nodo2->dato;
-    nodo2->dato = datoAuxiliar;
-  }
+  void *datoAuxiliar = NULL;
+  datoAuxiliar = nodo1->dato;
+  nodo1->dato = nodo2->dato;
+  nodo2->dato = datoAuxiliar;
 }
 
 void glist_mover (GList *lista, GNodo *antNodo1, GNodo *antNodo2){
   // Guardando referencia al nodo relevante.
   GNodo *relevante = antNodo2->sig;
-  // Haciendo que la lista "saltee" al nodo relevante.
+  // Haciendo que la lista "saltee" al nodo relevante, y tambien, notese que
+  // cuando se llame a la funcion, antNodo2 sera el nodo anterior al que se
+  // compara, por lo tanto, este adelantamiento, sumado a que el relevante
+  // se colocara al comienzo de la lista, nos deja ya colocado antComparando
+  // en la posicion indicada para la proxima iteracion.
   antNodo2->sig = relevante->sig;
   // El siguiente a relevante, es ahora el indicado.
   relevante->sig = antNodo1->sig;
@@ -102,15 +109,21 @@ void glist_mover_pos0 (GList *lista, GNodo *nodoInicial, GNodo *antNodo2){
     lista->final = antNodo2;
 }
 
-void glist_ordenar_archivar (char *nombreArchivoSalida, ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento, Compara comparar, GList lista){
+void glist_ordenar_archivar (char *nombreArchivoSalida,
+ ImprimeArchivo metodo_impresion, Ordenamiento metodo_ordenamiento,
+ Compara comparar, GList lista){
+  // Genera una copia de la lista a ordenar.
   GList listaAOdenar = glist_copiar_nodos (lista);
-
+  
+  // Se cuenta el tiempo de ejecucion del algoritmo de ordenamiento.
   clock_t begin = clock();
   listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
   clock_t end = clock();
   double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
-  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida, time_spent);
+  glist_imprimir_archivo (&listaAOdenar, metodo_impresion, nombreArchivoSalida,
+   time_spent);
+  // Liberando nodos de la copia.
   glist_liberar_nodos (&listaAOdenar);
 }
 
@@ -119,48 +132,43 @@ void merge (GNodo **izq, GNodo **der, Compara comparar){
   GNodo *iterador_izq = *izq;
   GNodo *iterador_der = *der;
   // Primero se necesita decidir cual sera el comienzo de resultado.
-  if (!comparar (iterador_izq->dato, iterador_der->dato)){
-  //  printf ("El nodo inicial es el de la der\n");
-    resultado = iterador_der;
-    *izq = *der; // De esta forma, lista 1 sera el comienzo de la lista mergeada total.
-    iterador_der = iterador_der->sig;
-  }
-  else {
-  //  printf ("El nodo inicial es el de la izq\n");
+  if (comparar (iterador_izq->dato, iterador_der->dato)){
     resultado = iterador_izq;
     iterador_izq = iterador_izq->sig;
   }
-
+  else {
+    resultado = iterador_der;
+    *izq = *der; 
+    // Asi, lista izquierda sera el comienzo de la lista mergeada total.
+    iterador_der = iterador_der->sig;
+  }
+  // Agregando los nodos que corresponden a la lista mergeada.
   while (iterador_izq != NULL && iterador_der != NULL){
     if (comparar (iterador_izq->dato, iterador_der->dato)){
-  //    printf ("El nodo siguiente es el de la izq\n");
       resultado->sig = iterador_izq;
       iterador_izq = iterador_izq->sig;
       resultado = resultado->sig;
     }
     else {
-  //    printf ("El nodo siguiente es el de la der\n");
       resultado->sig = iterador_der;
       iterador_der = iterador_der->sig;
       resultado = resultado->sig;
     }
   }
-
+  // Agregando la lista sobrante a la lista mergeada.
   if (iterador_izq != NULL){
-  //  printf ("Sobraron nodos de la izq\n");
     resultado->sig = iterador_izq;
   }
   else {
-  //  printf ("Sobraron nodos de la der\n");
     resultado->sig = iterador_der;
   }
 }
 
 void dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
   GNodo *iteradorLento = listaPrincipal;
-  // De esta forma, si la lista tiene un solo elemento, lo sabremos de inmediato
+  // Asi, si la lista tiene un solo elemento, lo sabremos de inmediato.
   GNodo *iteradorRapido = listaPrincipal->sig;
-
+  // El primer iterador avanzara de a una posicion y el segundo de a dos.
   while (iteradorRapido != NULL){
     iteradorRapido = iteradorRapido->sig;
     if (iteradorRapido != NULL){
@@ -168,9 +176,10 @@ void dividir (GNodo *listaPrincipal, GNodo **izq, GNodo **der){
       iteradorLento = iteradorLento->sig;
     }
   }
-
+  // Guardando las posiciones de las listas divididas.
   *der = iteradorLento->sig;
   *izq = listaPrincipal;
+  // Con esta ultima asignacion la lista queda divida.
   iteradorLento->sig = NULL;
 }
 
@@ -181,31 +190,41 @@ GList glist_selection_sort (GList lista, Compara funcion){
   for (; iterador1->sig != NULL; iterador1 = iterador1->sig){
     relevante = iterador1;
     iterador2 = iterador1->sig;
+    // Buscando el minimo elemento (segun la funcion que compara) 
+    // de la parte de la lista no ordenada.
     for (; iterador2 != NULL; iterador2 = iterador2->sig){
       if (funcion (iterador2->dato, relevante->dato)){
         relevante = iterador2;
       }
     }
+    // Intercambiando el minimo elemento con la posicion en la que debe quedar.
     glist_intercambiar (relevante, iterador1);
   }
   return lista;
 }
 
 GList glist_insertion_sort (GList lista, Compara funcion){
-  // Se comienza desde el segundo puesto que una lista de 1 elmeento esta ordenada.
   GNodo *antComparando = lista.inicio;
   GNodo *iterador2 = NULL;
-
+  // Se comienza desde la segunda posicion porque una lista de 1 elemento
+  // ya esta ordenada.
+  // Se hace a lo sumo un movimiento por iteracion.
   while (antComparando->sig != NULL){
     iterador2 = lista.inicio;
+    // Comparando con el primer elemento.
     if (funcion (antComparando->sig->dato, iterador2->dato)){
       glist_mover_pos0 (&lista, iterador2, antComparando);
     }
     else {
-      while (iterador2 != antComparando && !funcion (antComparando->sig->dato, iterador2->sig->dato)){
+      // Se recorre la lista ordenada comparando cada nodo con
+      // el elemento relevante.
+      while (iterador2 != antComparando && !funcion (antComparando->sig->dato,
+       iterador2->sig->dato)){
         iterador2 = iterador2->sig;
-      } // Si salio del bucle por esto, entonces la lista parcial esta ordenada.
+      } 
+      // Si salio del bucle por esto, entonces la lista parcial esta ordenada.
       if (iterador2 == antComparando){
+        // Unico caso en el que el iterador avanza de manera "forzada".
         antComparando = antComparando->sig;
       }
       else {
@@ -219,13 +238,17 @@ GList glist_insertion_sort (GList lista, Compara funcion){
 GNodo* merge_sort (GNodo *comienzo, Compara funcion){
   GNodo *izq = NULL;
   GNodo *der = NULL;
-
+  // Si la lista es vacia o tiene un solo elemento ya esta ordenada y
+  // cortamos la recursion.
   if (comienzo != NULL && comienzo->sig != NULL){
+    // Dividimos la lista en 2 listas mas chicas.
     dividir (comienzo, &izq, &der);
 
+    // Ordenamos por separado esas 2 listas.
     izq = merge_sort (izq, funcion);
     der = merge_sort (der, funcion);
 
+    // Unimos las 2 listas ordenadas en otra lista tambien ordenada.
     merge (&izq, &der, funcion);
     comienzo = izq;
   }
@@ -239,12 +262,15 @@ void glist_destruir (GList *lista, Destruir funcion){
   for (; iterador != NULL; ){
     libertador = iterador;
     iterador = iterador->sig;
+    // Libera cada dato de acuerdo al metodo dado.
     funcion (libertador->dato);
+    // Libera cada nodo.
     free (libertador);
   }
 }
 
 GList glist_merge_sort (GList lista, Compara funcion){
+  // Llama al algoritmo de ordenamiento y cambia la GList.
   lista.inicio = merge_sort (lista.inicio, funcion);
   GNodo *iterador = lista.inicio;
   for (; iterador->sig != NULL; iterador = iterador->sig);
@@ -259,6 +285,7 @@ void glist_liberar_nodos (GList *lista){
   for (; iterador != NULL; ){
     libertador = iterador;
     iterador = iterador->sig;
+    // Libera cada nodo.
     free (libertador);
   }
 }
