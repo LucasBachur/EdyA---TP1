@@ -80,12 +80,12 @@ void glist_mover (GList *lista, GNodo *antNodo1, GNodo *antNodo2){
   relevante->sig = antNodo1->sig;
   // Colocando relevante en la lista.
   antNodo1->sig = relevante;
-  // Si relevante era el final de la lista..
+  // Si relevante era el final de la lista.
   if (antNodo2 ->sig == NULL)
     lista->final = antNodo2;
 }
 
-void glist_mover_pos0 (GList *lista, GNodo *antNodo2, GNodo *nodoInicial){
+void glist_mover_pos0 (GList *lista, GNodo *nodoInicial, GNodo *antNodo2){
   // Guardando referencia al nodo relevante.
   GNodo *relevante = antNodo2->sig;
   // Haciendo que la lista "saltee" al nodo relevante, y tambien, notese que
@@ -199,7 +199,7 @@ GList glist_insertion_sort (GList lista, Compara funcion){
   while (antComparando->sig != NULL){
     iterador2 = lista.inicio;
     if (funcion (antComparando->sig->dato, iterador2->dato)){
-      glist_mover_pos0 (&lista, antComparando, iterador2);
+      glist_mover_pos0 (&lista, iterador2, antComparando);
     }
     else {
       while (iterador2 != antComparando && !funcion (antComparando->sig->dato, iterador2->sig->dato)){
