@@ -31,8 +31,8 @@ int numero_random_w (int tope){
   unsigned int b = rand ();
   // Multiplicamos los dos numeros generados aletoriamente, pero como puede
   // superar el tamaño de un int usamos long int (tambien unsinged).
-  unsigned long int c =  ((long) a * (long)b) % tope;
-  return c;
+  unsigned long int c =  ((long) a * (long) b) % tope;
+  return (int)c;
 }
 
 int generar_numero_random (int band, int tope){

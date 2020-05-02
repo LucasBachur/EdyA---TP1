@@ -50,7 +50,7 @@ void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion,
     }
 
     // Aplicamos la funcion de impresion a cada dato de la lista.
-    forrapido (*lista, iterador){
+    forrapido ((*lista), iterador){
       funcion (iterador->dato, Archivo);
     }
   }else{
