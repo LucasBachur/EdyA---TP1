@@ -1,5 +1,5 @@
-// Este programa, lee el archivo, y escribe en otro las personas con sus caracteristicas
-// de la sigueinte manera:
+// Este programa, lee el archivo, y escribe en otro las personas con sus 
+// caracteristicas de la sigueinte manera:
 // Juan Perez, 19, Villa General Belgrano
 // Francisco Jose Maria Olviares, 23, Rosario
 // Hay un archivo de localidades, uno de nombres y los numeros son de 1 a 100.
@@ -25,15 +25,19 @@ int numero_random_l (int tope){
 }
 
 int numero_random_w (int tope){
+  // Usamos unsigned int como tipo de dato ya que los numeros generados seran
+  // siempre positivos.
   unsigned int a = rand ();
   unsigned int b = rand ();
+  // Multiplicamos los dos numeros generados aletoriamente, pero como puede
+  // superar el tamaño de un int usamos long int (tambien unsinged).
   unsigned long int c =  ((long) a * (long)b) % tope;
   return c;
 }
 
 int generar_numero_random (int band, int tope){
   int devolver;
-  // Lo hicimos con switch por si se quisieran agreagar mas sistemas operativos.
+  // Lo hicimos con switch por si se quisieran agregar mas sistemas operativos.
   switch (band) {
     case 0:
       devolver = numero_random_w (tope);
@@ -49,6 +53,7 @@ int generar_numero_random (int band, int tope){
 
 ARandom* posiciones_aleatorias (int cant, int longArchivo){
   ARandom *arregloRand = malloc (sizeof (ARandom) * (cant + 1));
+  // Inicializacion del array.
   for (int i = 0; i < cant; ++i){
     arregloRand[i].numLinea = -1;
     arregloRand[i].pos = -1;
@@ -90,11 +95,11 @@ char **generar_arreglo (char *nombreArchivoE, int cant, int *bandera, int longAr
 
   // Arreglo que tendra los numeros de lineas.
   ARandom *arrayPos = posiciones_aleatorias(cant, longArchivo);
-  // se hace en +1 porque el primero tiene el mas grande repetido y no nos
+  // Se hace en +1 porque el primero tiene el mas grande repetido y no nos
   // interesa ordenarlo.
   qsort (arrayPos + 1, cant, sizeof(ARandom), ARandom_mayor);
   FILE *Archivo = fopen (nombreArchivoE, "r");
-  // si se abrio correctamente...
+  // Si se abrio correctamente...
   if (Archivo != NULL){
     char buffer[BUFFER];
     // colocados comienza desde 1 pues queremos saltear el primer elemento de
