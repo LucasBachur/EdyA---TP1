@@ -15,7 +15,6 @@ void sistema_operativo (int *band){
   #ifdef _WIN32
     *band = 0;
     #elif __linux__
-      srand (time (NULL));
       *band = 1;
   #endif
 }
