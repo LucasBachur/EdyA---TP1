@@ -9,8 +9,8 @@
 #define LONG_ARCHIVO_P 450
 
 
-// Al main le vamos a pasar, el nobmre del archivo base, el de salida
-// y la cant de elementos a generar.
+// Al main le vamos a pasar, los nombres de los archivos de nombres, paises
+// y de salida, y la cant de elementos a generar.
 int main (int argc, char **argv){
   srand (time (NULL));
   assert (argc == 5);
