@@ -12,16 +12,18 @@ int edad;
 char *lugarDeNacimiento; // pais o capital
 } Persona;
 
-// Dado un puntero a void.
-// Lo interpreta como persona, y libera los atributos 'nombre' y 'lugarDeNacimiento'
+// Dado un puntero a void, lo interpreta
+// como persona, y libera los atributos 'nombre' y 'lugarDeNacimiento'.
+// liberar_persona: void* ->
 void liberar_persona (void *persona){
   free (((Persona*)persona)->nombre);
   free (((Persona*)persona)->lugarDeNacimiento);
   free (persona);
 }
 
-// Dados dos punteros a void.
-// Los interpreta como personas y compara sus atributos 'edad'.
+// Dados dos punteros a void,
+// los interpreta como personas y compara sus atributos 'edad'.
+// edad_menor: void* void* -> int
 int edad_menor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
@@ -29,6 +31,9 @@ int edad_menor (void *dato1, void *dato2){
   return edad1 < edad2;
 }
 
+// Dados dos punteros a void,
+// los interpreta como personas y compara el largo de sus nombres.
+// largo_nombre_menor: void* void* -> int
 int largo_nombre_menor (void *dato1, void *dato2){
   int largo1 = strlen (((Persona*)dato1)->nombre);
   int largo2 = strlen (((Persona*)dato2)->nombre);
@@ -36,14 +41,17 @@ int largo_nombre_menor (void *dato1, void *dato2){
   return largo1 < largo2;
 }
 
-// Dado un dato como puntero a void, y un archivo abirto en modo de escritura.
-// Escribe el dato interpretandolo como persona.
+// Dado un dato como puntero a void, y un archivo abierto en modo de escritura,
+// escribe el dato interpretandolo como persona.
+// imprimir_persona_archivo: void* FILE* ->
 void imprimir_persona_archivo (void *dato, FILE *Archivo){
-  fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre, ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
+  fprintf (Archivo, "%s, %d, %s\n", ((Persona*)dato)->nombre,
+   ((Persona*)dato)->edad, ((Persona*)dato)->lugarDeNacimiento);
 }
 
 // Dado un nombre, una edad, y un pais. Devuelve un puntero a Persona que tiene
 // un solo elemento y sus datos son los que se pasaron a la funcion.
+// crear_persona: char* int char* -> Persona*
 Persona* crear_persona (char *nombre, int edad, char *pais){
   Persona *nuevaPersona = malloc (sizeof (Persona));
   nuevaPersona->nombre = malloc (sizeof (char) * 80);
@@ -57,6 +65,7 @@ Persona* crear_persona (char *nombre, int edad, char *pais){
 }
 
 // Dado un nombre de un archivo de entrada, devuelve una lista con sus datos.
+// interpretar_archivo: char* -> GList
 GList interpretar_archivo (char *nombreArchivoEntrada){
   GList listaInterpretada = glist_crear ();
   FILE *Archivo = fopen (nombreArchivoEntrada, "r");
@@ -77,8 +86,6 @@ GList interpretar_archivo (char *nombreArchivoEntrada){
   fclose (Archivo);
   return listaInterpretada;
 }
-
-
 
 
 
