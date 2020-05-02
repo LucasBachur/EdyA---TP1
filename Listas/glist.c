@@ -132,7 +132,7 @@ void merge (GNodo **izq, GNodo **der, Compara comparar){
   GNodo *iterador_izq = *izq;
   GNodo *iterador_der = *der;
   // Primero se necesita decidir cual sera el comienzo de resultado.
-  if (comparar (iterador_izq->dato, iterador_der->dato)){
+  if (comparar (iterador_izq->dato, iterador_der->dato) < 0){
     resultado = iterador_izq;
     iterador_izq = iterador_izq->sig;
   }
@@ -144,7 +144,7 @@ void merge (GNodo **izq, GNodo **der, Compara comparar){
   }
   // Agregando los nodos que corresponden a la lista mergeada.
   while (iterador_izq != NULL && iterador_der != NULL){
-    if (comparar (iterador_izq->dato, iterador_der->dato)){
+    if (comparar (iterador_izq->dato, iterador_der->dato) < 0){
       resultado->sig = iterador_izq;
       iterador_izq = iterador_izq->sig;
       resultado = resultado->sig;
@@ -193,7 +193,7 @@ GList glist_selection_sort (GList lista, Compara funcion){
     // Buscando el minimo elemento (segun la funcion que compara) 
     // de la parte de la lista no ordenada.
     for (; iterador2 != NULL; iterador2 = iterador2->sig){
-      if (funcion (iterador2->dato, relevante->dato)){
+      if (funcion (iterador2->dato, relevante->dato) < 0){
         relevante = iterador2;
       }
     }
@@ -212,14 +212,14 @@ GList glist_insertion_sort (GList lista, Compara funcion){
   while (antComparando->sig != NULL){
     iterador2 = lista.inicio;
     // Comparando con el primer elemento.
-    if (funcion (antComparando->sig->dato, iterador2->dato)){
+    if (funcion (antComparando->sig->dato, iterador2->dato) < 0){
       glist_mover_pos0 (&lista, iterador2, antComparando);
     }
     else {
       // Se recorre la lista ordenada comparando cada nodo con
       // el elemento relevante.
-      while (iterador2 != antComparando && !funcion (antComparando->sig->dato,
-       iterador2->sig->dato)){
+      while (iterador2 != antComparando && funcion (antComparando->sig->dato,
+       iterador2->sig->dato) >= 0){
         iterador2 = iterador2->sig;
       } 
       // Si salio del bucle por esto, entonces la lista parcial esta ordenada.

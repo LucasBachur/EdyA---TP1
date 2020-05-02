@@ -28,7 +28,7 @@ int edad_menor (void *dato1, void *dato2){
   int edad1 = ((Persona*)dato1)->edad;
   int edad2 = ((Persona*)dato2)->edad;
 
-  return edad1 < edad2;
+  return edad1 - edad2;
 }
 
 // Dados dos punteros a void,
@@ -38,7 +38,7 @@ int largo_nombre_menor (void *dato1, void *dato2){
   int largo1 = strlen (((Persona*)dato1)->nombre);
   int largo2 = strlen (((Persona*)dato2)->nombre);
 
-  return largo1 < largo2;
+  return largo1 - largo2;
 }
 
 // Dado un dato como puntero a void, y un archivo abierto en modo de escritura,
@@ -116,9 +116,6 @@ int main (int argc, char **argv){
 
 /*
 FALTA:
-  1) Comentar codigo.
   3) Informe.
   4) Revisar algoritmos.
-  6) Convenciones de codigo.
-  7) Archivo de persona?
 */
