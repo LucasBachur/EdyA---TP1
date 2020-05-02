@@ -12,18 +12,19 @@
 // Al main le vamos a pasar, el nobmre del archivo base, el de salida
 // y la cant de elementos a generar.
 int main (int argc, char **argv){
+  srand (time (NULL));
   assert (argc == 5);
   int cant = atoi(argv[4]);
   int bandera1 = 1, bandera2 = 2, bandera3 = 3, retorno = 0;
 
   // Si bien se podrian hacer en un solo buffer, preferimos dejarlo asi por
   // claridad.
-  char nombreANombres[200] = "Generacion/";
-  strcat (nombreANombres, argv[1]);
-  char nombreAPaises[200] = "Generacion/";
-  strcat (nombreAPaises, argv[2]);
-  char nombreASalida[200] = "Listas/";
-  strcat (nombreASalida, argv[3]);
+    char nombreANombres[200] = "Generacion/";
+    strcat (nombreANombres, argv[1]);
+    char nombreAPaises[200] = "Generacion/";
+    strcat (nombreAPaises, argv[2]);
+    char nombreASalida[200] = "Listas/";
+    strcat (nombreASalida, argv[3]);
 
   char **arreglo_nombres = generar_arreglo(nombreANombres, cant, &bandera1, LONG_ARCHIVO_N);
   // Si no hubo problemas con el archivo...

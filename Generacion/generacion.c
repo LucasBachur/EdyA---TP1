@@ -25,13 +25,10 @@ int numero_random_l (int tope){
 }
 
 int numero_random_w (int tope){
-  srand (time (NULL));
-  int a = rand ();
-  printf ("Primer random: |%d|, ", a);
-  srand (time (NULL));
-  int b = rand ();
-  printf ("Segundo random: |%d|, ", b);
-  return (a * b) % (tope + 1);
+  unsigned int a = rand ();
+  unsigned int b = rand ();
+  unsigned long int c =  ((long) a * (long)b) % tope;
+  return c;
 }
 
 int generar_numero_random (int band, int tope){
