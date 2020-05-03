@@ -1,7 +1,7 @@
 #ifndef __PERSONA_H__
 #define __PERSONA_H__
 
-typedef struct {}
+typedef struct {
 char *nombre;
 int edad;
 char *lugarDeNacimiento; // pais o capital
