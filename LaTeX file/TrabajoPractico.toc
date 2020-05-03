@@ -1,14 +1,14 @@
 \babel@toc {spanish}{}
-\contentsline {section}{\numberline {1}Introduccion}{1}
-\contentsline {subsection}{\numberline {1.1}Motivacion del trabajo.}{1}
+\contentsline {section}{\numberline {1}Introducci'on}{1}
+\contentsline {subsection}{\numberline {1.1}Motivaci'on del trabajo.}{1}
 \contentsline {paragraph}{}{1}
 \contentsline {subsection}{\numberline {1.2}El trabajo consiste en 2 programas en c.}{1}
 \contentsline {paragraph}{}{1}
 \contentsline {paragraph}{}{1}
 \contentsline {section}{\numberline {2}Decisiones}{1}
-\contentsline {subsection}{\numberline {2.1}Criterios de comparacion.}{1}
+\contentsline {subsection}{\numberline {2.1}Criterios de comparaci'on.}{1}
 \contentsline {paragraph}{}{1}
-\contentsline {subsection}{\numberline {2.2}Implementacion de la lista.}{1}
+\contentsline {subsection}{\numberline {2.2}Implementaci'on de la lista.}{1}
 \contentsline {paragraph}{}{1}
 \contentsline {paragraph}{}{1}
 \contentsline {paragraph}{}{1}
@@ -26,13 +26,17 @@
 \contentsline {paragraph}{}{3}
 \contentsline {paragraph}{Caracteres especiales}{3}
 \contentsline {subsection}{\numberline {4.1}programa1}{3}
-\contentsline {paragraph}{Programa de generacion de datos de prueba}{3}
+\contentsline {paragraph}{Programa de generaci'on de datos de prueba}{3}
 \contentsline {paragraph}{}{3}
 \contentsline {paragraph}{ARandom}{3}
 \contentsline {paragraph}{Generacion de numeros aleatorios}{3}
 \contentsline {paragraph}{Generacion arreglo ARandom}{3}
-\contentsline {paragraph}{Generacion arreglos nombres y paises}{4}
+\contentsline {paragraph}{Generaci'on arreglos nombres y pa'ises}{4}
 \contentsline {paragraph}{Escritura archivo salida}{4}
 \contentsline {section}{\numberline {5}programa2}{5}
 \contentsline {paragraph}{}{5}
-\contentsline {subsection}{\numberline {5.1}Comparaciones en tiempo de ejecuci'on}{5}
+\contentsline {subsection}{\numberline {5.1}Selection sort}{5}
+\contentsline {paragraph}{}{5}
+\contentsline {subsection}{\numberline {5.2}Insertion sort}{5}
+\contentsline {subsection}{\numberline {5.3}Merge sort}{5}
+\contentsline {subsection}{\numberline {5.4}Comparaciones en tiempo de ejecuci'on}{5}

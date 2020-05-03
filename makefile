@@ -4,30 +4,41 @@
 # Y se compilaran en cada caso los programas indicados.
 # Tambien incluimos la instruccion programas que compilara ambos programas en un solo comando.
 
-programas: generacion.o generar.o listas.o glist.o persona.o
-	gcc -o programa1.out generar.o generacion.o
-	gcc -o programa2.out listas.o glist.o persona.o
+flags = -Wall -Werror -Wextra -g
+objetosLista = listas.o glist.o persona.o
+objetosGen = generacion.o generar.o
+listas = Listas/listas.c
+persona = Listas/Persona/persona
+glist = Listas/glist
+generacion = Generacion/generacion
+generar = Generacion/generar
 
-programa1: generacion.o generar.o
-	gcc -o programa1.out generar.o generacion.o
+programas: $(objetosGen) $(objetosLista)
+	gcc -o programa1.out $(objetosGen)
+	gcc -o programa2.out $(objetosLista)
 
-programa2: listas.o glist.o persona.o
-	gcc -o programa2.out listas.o glist.o persona.o
 
-generar.o: Generacion/generar.c
-	gcc -Wall -Werror -Wextra -g -c Generacion/generar.c
+programa1: $(objetosGen)
+	gcc -o programa1.out $(objetosGen)
 
-generacion.o: Generacion/generacion.c Generacion/generacion.h
-	gcc -Wall -Werror -Wextra -g -c Generacion/generacion.c
+generar.o: $(generar).c
+	gcc $(flags) -c $(generar).c
 
-listas.o: Listas/listas.c
-	gcc -Wall -Werror -Wextra -g -c Listas/listas.c
+generacion.o: $(generacion).c $(generacion).h
+	gcc $(flags) -c $(generacion).c
 
-persona.o: Listas/Persona/persona.c Listas/Persona/persona.h
-	gcc -Wall -Werror -Wextra -g -c Listas/Persona/persona.c
 
-glist.o: Listas/glist.c Listas/glist.h
-	gcc -Wall -Werror -Wextra -g -c Listas/glist.c
+programa2: $(objetosLista)
+	gcc -o programa2.out $(objetosLista)
+
+listas.o: $(listas)
+	gcc $(flags) -c $(listas)
+
+persona.o: $(persona).c $(persona).h
+	gcc $(flags) -c $(persona).c
+
+glist.o: $(glist).c $(glist).h
+	gcc $(flags) -c $(glist).c
 
 clean:
-	rm -rf *.out *.o
+	rm -rf *.out *.o *txt

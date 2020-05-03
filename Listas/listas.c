@@ -23,17 +23,17 @@ int main (int argc, char **argv){
 
   lista = interpretar_archivo (nombreArchivoEntrada);
 
-  glist_ordenar_archivar ("Edad_menor_selection", imprimir_persona_archivo, glist_selection_sort, edad_menor, lista);
+  glist_ordenar_archivar ("Edad_menor_selection.txt", imprimir_persona_archivo, glist_selection_sort, edad_menor, lista);
 
-  glist_ordenar_archivar ("Edad_menor_insertion", imprimir_persona_archivo, glist_insertion_sort, edad_menor, lista);
+  glist_ordenar_archivar ("Edad_menor_insertion.txt", imprimir_persona_archivo, glist_insertion_sort, edad_menor, lista);
 
-  glist_ordenar_archivar ("Edad_menor_mergesort", imprimir_persona_archivo, glist_merge_sort, edad_menor, lista);
+  glist_ordenar_archivar ("Edad_menor_mergesort.txt", imprimir_persona_archivo, glist_merge_sort, edad_menor, lista);
 
-  glist_ordenar_archivar ("Largo_nombre_menor_selection", imprimir_persona_archivo, glist_selection_sort, largo_nombre_menor, lista);
+  glist_ordenar_archivar ("Largo_nombre_menor_selection.txt", imprimir_persona_archivo, glist_selection_sort, largo_nombre_menor, lista);
 
-  glist_ordenar_archivar ("Largo_nombre_menor_insertion", imprimir_persona_archivo, glist_insertion_sort, largo_nombre_menor, lista);
+  glist_ordenar_archivar ("Largo_nombre_menor_insertion.txt", imprimir_persona_archivo, glist_insertion_sort, largo_nombre_menor, lista);
 
-  glist_ordenar_archivar ("Largo_nombre_menor_mergesort", imprimir_persona_archivo, glist_merge_sort, largo_nombre_menor, lista);
+  glist_ordenar_archivar ("Largo_nombre_menor_mergesort.txt", imprimir_persona_archivo, glist_merge_sort, largo_nombre_menor, lista);
 
 
 

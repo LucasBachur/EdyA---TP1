@@ -41,23 +41,23 @@
 }
 
 \begin{document}
-
+	
 	\pagenumbering{roman}
 	\thispagestyle{empty}
 	\begin{center}
 		\Huge
-		\textbf{Trabajo Practico N\degree1}\\
+		\textbf{Trabajo Pr'actico N\degree1}\\
 		\LARGE
 		\vfill
-		\textbf{Licenciatura en Ciencias de la Computacion}
+		\textbf{Licenciatura en Ciencias de la Computaci'on}
 		\vfill
 		\textbf{Estructuras de datos y algoritmos I} \\
 		\vfill
 		\includegraphics[width=2in]{UNRlogo.png} \\
 		\vfill
-		\textbf{Implementacion de metodos de ordenamiento a listas enlazadas generales}
+		\textbf{Implementaci'on de m'etodos de ordenamiento a listas enlazadas generales}
 		\vfill
-		Lucas Bachur, Tomas Scalbi \\
+		Lucas Bachur, Tom'as Scalbi \\
 		2020 \\
 	\end{center}
 	\pagebreak
@@ -66,81 +66,81 @@
 	
 	\pagebreak
 	\pagenumbering{arabic}
-	\section{Introduccion}
-	\subsection{Motivacion del trabajo.}
+	\section{Introducci'on}
+	\subsection{Motivaci'on del trabajo.}
 	\paragraph{}
-	El objetivo del trabajo es implementar algunos algoritmos de ordenacion sobre listas enlazadas generales. En particular a los algoritmos \textbf{Insertion Sort, Selection Sort y Merge Sort.}\\
+	El objetivo del trabajo es implementar algunos algoritmos de ordenaci'on sobre listas enlazadas generales. En particular a los algoritmos \textbf{Insertion Sort, Selection Sort y Merge Sort.}\\
 	\subsection{El trabajo consiste en 2 programas en c.}
 	\paragraph{}
-	El primero toma los nombres de los archivos de entradas de datos, el nombre del archivo de salida, y la cantidad de datos a generar. Y genera un nuevo archivo con el nombre que se le paso, donde almacena datos generados en forma aleatoria con la informacion de los archivos de entrada, formateados de la siguiente manera:
+	El primero toma los nombres de los archivos de entradas de datos, el nombre del archivo de salida, y la cantidad de datos a generar. Y genera un nuevo archivo con el nombre que se le paso, donde almacena datos generados en forma aleatoria con la informaci'on de los archivos de entrada, formateados de la siguiente manera:
 	\begin{verbatim}
 	Juan Perez , 19 , Villa General Belgrano 
 	Francisco Jose Maria Olviares , 23 , Rosario
 	\end{verbatim}
 	\paragraph{}
-	El segundo, toma como argumento el nombre del archivo donde esta el juego de datos. Y genera 6 archivos donde se encuentran estos datos ordenados segun 2 criterios diferentes, y 3 metodos distintos, mostrando en la primer linea el tiempo que tardo el algoritmo en ordenar la lista en segundos, sera facil ver que algoritmo ordeno cada lista puesto que el nombre del archivo contendra primero el criterio de comparacion y luego el metodo que se utilizo. Un ejemplo:
+	El segundo, toma como argumento el nombre del archivo donde est'a el juego de datos. Y genera 6 archivos donde se encuentran estos datos ordenados seg'un 2 criterios diferentes, y 3 m'etodos distintos, mostrando en la primer l'inea el tiempo que tard'o el algoritmo en ordenar la lista en segundos, ser'a f'acil ver que algoritmo orden'o cada lista puesto que el nombre del archivo contendr'a primero el criterio de comparaci'on y luego el m'etodo que se utiliz'o. Un ejemplo:
 	\begin{verbatim}
-		Tiempo de ordenamiento: |0.037133|
-		
-		FLOR MARIA GODINEZ, 1, Jerusalén Este
-		JORGE ENRIQUE CHAVARRIA, 1, España
-		.
-		.
-		.
+	Tiempo de ordenamiento: |0.037133|
+	
+	FLOR MARIA GODINEZ, 1, Jerusalén Este
+	JORGE ENRIQUE CHAVARRIA, 1, España
+	.
+	.
+	.
 	\end{verbatim}
 	\section{Decisiones}
-	\subsection{Criterios de comparacion.}
+	\subsection{Criterios de comparaci'on.}
 	\paragraph{}
-	Los criterios de comparacion que propusimos son: menor edad y menor largo de nombre. Elegimos estos criterios de comparacion frente a otros porque resultan sencillos de codear y entendemos que el objetivo del trabajo no es crear un criterio de comparacion complejo mas bien es que se aplique correctamente.
-		
-	\subsection{Implementacion de la lista.}
+	Los criterios de comparaci'on que propusimos son: menor edad y menor largo de nombre. Elegimos estos criterios de comparaci'on frente a otros porque resultan sencillos de codear y entendemos que el objetivo del trabajo no es crear un criterio de comparaci'on complejo mas bien es que se aplique correctamente.
+	
+	\subsection{Implementaci'on de la lista.}
 	\paragraph{}
-	Utilizamos \textbf{Listas simplemente enlazadas, con un puntero al comienzo y otro al fin} y las definimos con las siguiente estructura:
+	Utilizamos \textbf{Listas simplemente enlazadas, con un puntero al comienzo y otro al final} y las definimos con las siguiente estructura:
 	\begin{lstlisting}[style=CStyle]
 	typedef struct _GNodo {
-		void *dato;
-		struct _GNodo *sig;
+	void *dato;
+	struct _GNodo *sig;
 	} GNodo;
-			
+	
 	typedef struct _GList {
-		GNodo *inicio;
-		GNodo *final;
+	GNodo *inicio;
+	GNodo *final;
 	} GList;	
 	\end{lstlisting}
 	\paragraph{} 
-	Elegimos trabajar con listas simplemente enlazadas pues nos parecio que es la estructura mas simple y creemos que esto nos permite concentrarnos mas en la implementacion de los algoritmos de ordenamiento, el objetivo del trabajo.
+	Elegimos trabajar con listas simplemente enlazadas pues nos pareci'o que es la estructura m'as simple y creemos que esto nos permite concentrarnos mas en la implementaci'on de los algoritmos de ordenamiento, el objetivo del trabajo.
 	\paragraph{}
-	Elegimos tambien esta implementacion de listas con puntero al comienzo y al final por sobre la de puntero al inicio solamente para poder acceder rapidamente al final de la lista para añadir elementos. Y a su vez la elegimos por sobre la lista circular puesto que esta ultima ya la habiamos implementado en la practica 2 y queriamos hacer una implementacion nueva.
+	Elegimos tambi'en esta implementaci'on de listas con puntero al comienzo y al final por sobre la de puntero al inicio solamente para poder acceder r'apidamente al final de la lista para añadir elementos. Y a su vez la elegimos por sobre la lista circular puesto que esta 'ultima ya la hab'iamos implementado en la pr'actica 2 y quer'iamos hacer una implementaci'on nueva.
 	
 	\pagebreak
 	
 	\section{Carpeta de entrega.}
 	\paragraph{}
-	En la carpeta donde se entrega este trabajo, hay 2 carpetas: \emph{Generacion} y \emph{Listas}. Y un archivo makefile que contendra las instrucciones de compilacion de los dos programas.
+	En la carpeta donde se entrega este trabajo, hay 2 carpetas: \emph{Generacion} y \emph{Listas}. Y un archivo makefile que contendra las instrucciones de compilaci'on de los dos programas.
 	
 	\subsection{Generacion}
 	\paragraph{}
 	En esta carpeta se encuentran los archivos: \\ 
 	\textbf{generacion.h}: el archivo de cabecera con los prototipos y las declaraciones de tipos de datos utilizados. \\
-	\textbf{generacion.c}: el archivo que contiene las implementaciones de las funciones declaradas en \emph{generacion.h}, ademas contiene una definicion: \lstinline|#define BUFFER 80| que se utilizara solo en estas funciones. \\
+	\textbf{generacion.c}: el archivo que contiene las implementaciones de las funciones declaradas en \emph{generacion.h}, ademas contiene una definici'on: \lstinline|#define BUFFER 80| que se utilizara solo en estas funciones. \\
 	\textbf{generar.c}: archivo que contiene el main de programa1. \\
-	\textbf{nombres1.txt}: archivo de entrada de datos que contiene un nombre por linea.\\
-	\textbf{paises.txt}: archivo de entradad de datos que contiene un pais por linea. 
+	\textbf{nombres1.txt}: archivo de entrada de datos que contiene un nombre por l'inea.\\
+	\textbf{paises.txt}: archivo de entrada de datos que contiene un pa'is por l'inea. 
 	\paragraph{}
-	Cabe aclarar que el makefile sabe que los archivos de entrada estan en esta carpeta.
+	Cabe aclarar que el makefile sabe que los archivos de entrada est'an en esta carpeta.
 	
 	\subsection{Listas}
 	\paragraph{}
-	En esta carpeta se encuentran los arhicvos: \\
-	\textbf{glist.h}: archivo de cabecera que con los prototipos y las declararciones de tipos de datos utilizados con respecto a las listas simplementes enlazadas para este trabajo en particualr.\\
+	En esta carpeta se encuentran los archivos: \\
+	\textbf{glist.h}: archivo de cabecera que con los prototipos y las declararciones de tipos de datos utilizados con respecto a las listas simplementes enlazadas para este trabajo en particular.\\
 	\textbf{glist.c}: archivo que contiene las implementaciones de las funciones declaradas en \emph{glist.h}\\
-	\textbf{listas.c}: archivo que contiene el main del programa2 y las funciones especificas de la estructura de datos que se esta empleando.\\
+	\textbf{listas.c}: archivo que contiene el main del programa2 y las funciones espec'ificas de la estructura de datos que se est'a empleando.\\
 	\paragraph{}
-	\textbf{Importante}, cuando se ejecuten el primer programa, segun nuestro diseño, el archivo de salida con los datos de prueba se creara en esta carpeta.
+	\textbf{Importante}, cuando se ejecuten el primer programa, seg'un nuestro diseño, el archivo de salida con los datos de prueba se crear'a en esta carpeta.
 	
 	\subsection{makefile}
 	\paragraph{}
-	Decidimos utilizar make para agilizar los tiempos que tardabamos escribiendo los comandos en consola. El uso de esta herramienta fue muy util durante la ejecucion del trabajo. Aqui dejamos el codigo que esta dentro de nuestro makefile, donde programa1 se refiere al programa que hace el archivo de juego de datos, y programa2 al que trabaja con las listas.
+	Decidimos utilizar make para agilizar los tiempos que tardabamos escribiendo los comandos en consola. El uso de esta herramienta fue muy 'util durante la ejecuci'on del trabajo. Aqu'i dejamos el c'odigo que esta dentro de nuestro makefile, donde programa1 se refiere al programa que hace el archivo de juego de datos, y programa2 al que trabaja con las listas.
 	\begin{verbatim}
 	programas: generacion.o generar.o listas.o glist.o
 	gcc -o programa1.out generar.o generacion.o
@@ -164,39 +164,39 @@
 	glist.o: Listas/glist.c Listas/glist.h
 	gcc -Wall -Werror -Wextra -g -c Listas/glist.c
 	\end{verbatim}
-	 \pagebreak
-	 
-	 \section{Funcionamiento}
-	 \paragraph{}
-	 El funcionamiento mas especifico de las funciones esta bien explicado cuando estas son declaradas por primera vez, y en las implementaciones de los mismos adjuntamos notas de comentario explicando un poco mas detalladamente las partes que nos parecieron necesarias para mejorar la lectura del codigo.
-	 \paragraph{Caracteres especiales}
-	 No tuvimos ningun problema con las letras acentuadas ni los caracteres especiales en ningun sistema operativo, asi que no hicimos nada especial en el programa.
-	 \subsection{programa1}
-	 \paragraph{Programa de generacion de datos de prueba}
-	 Primeramente se interpretan los argumentos pasados y se declaran banderas que se utilizaran cada vez que querramos crear o abrir un archivo, e indicaran si estos lo hicieron correctamente.
-	 \paragraph{} 
-	 Cuando se pasa un nombre de archivo, ya sea de entrada o de salida, decidimos que nuestro main lo cree o lo busque leer de un lugar especifico que se determina dentro de la funcion, especificamente, los archivos de entrada se encuentran dentro de la carpeta Generacion, y el archivo de salida se escribe en la carpeta Listas.
-	 \\
-	 Si la cantidad de datos a generar es 0, directamente se crea un archivo vacio con el nombre indicado.
-	 \\
-	 \paragraph{ARandom} Para asegurar la aleatoriedad y la eficiencia, se nos ocurrio crear un nuevo tipo de dato al que llamamos ARandom, definido de la siguiente manera:
-	 \begin{lstlisting}[style=CStyle]
-typedef struct _random{
+	\pagebreak
+	
+	\section{Funcionamiento}
+	\paragraph{}
+	El funcionamiento m'as espec'ifico de las funciones est'a bien explicado cuando estas son declaradas por primera vez, y en las implementaciones de los mismos adjuntamos notas de comentario explicando un poco m'as detalladamente las partes que nos parecieron necesarias para mejorar la lectura del c'odigo.
+	\paragraph{Caracteres especiales}
+	No tuvimos ning'un problema con las letras acentuadas ni los car'acteres especiales en ning'un sistema operativo, as'i que no hicimos nada especial en el programa.
+	\subsection{programa1}
+	\paragraph{Programa de generaci'on de datos de prueba}
+	Primeramente se interpretan los argumentos pasados y se declaran banderas que se utilizar'an cada vez que querramos crear o abrir un archivo, e indicar'an si estos lo hicieron correctamente.
+	\paragraph{} 
+	Cuando se pasa un nombre de archivo, ya sea de entrada o de salida, decidimos que nuestro main lo cree o lo busque leer de un lugar espec'ifico que se determina dentro de la funci'on, espec'ificamente, los archivos de entrada se encuentran dentro de la carpeta Generacion, y el archivo de salida se escribe en la carpeta Listas.
+	\\
+	Si la cantidad de datos a generar es 0, directamente se crea un archivo vac'io con el nombre indicado.
+	\\
+	\paragraph{ARandom} Para asegurar la aleatoriedad y la eficiencia, se nos ocurri'o crear un nuevo tipo de dato al que llamamos ARandom, definido de la siguiente manera:
+	\begin{lstlisting}[style=CStyle]
+	typedef struct _random{
 	int numLinea;
 	int pos;
-} ARandom;
-	 \end{lstlisting}
-	 La estructura ARandom representa un numero generado aleatoriamente y la posicion en la que se genero. De esta manera podemos generar un array de ARandom, donde guardamos los numeros aleatorios que vamos generando al mismo tiempo que la posicion que ocupa en el array original, es decir el orden en el que este numero fue generado. De esta forma, podemos ordenar el arreglo ARandom de menor a mayor por el numLinea para que cuando leamos el archivo lo hagamos de la forma mas eficiente, y a la vez, guardar el orden en el que fueron saliendo para lograr mantener la aleatoriedad.
-	 
+	} ARandom;
+	\end{lstlisting}
+	La estructura ARandom representa un numero generado aleatoriamente y la posici'on en la que se genero. De esta manera podemos generar un array de ARandom, donde guardamos los numeros aleatorios que vamos generando al mismo tiempo que la posici'on que ocupa en el array original, es decir el orden en el que este n'umero fue generado. De esta forma, podemos ordenar el arreglo ARandom de menor a mayor por el numLinea para que cuando leamos el archivo lo hagamos de la forma m'as eficiente, y a la vez, guardar el orden en el que fueron saliendo para lograr mantener la aleatoriedad.
+	
 	\paragraph{Generacion de numeros aleatorios}
-	Primero que nada, encontramos necesario distinguir el metodo de generacion de cada numero aleatorio segun en que sistema operativo nos encontremos (lo hicimos solo para windows y linux pero  lo escribimos de tal forma que sea facil añadir un caso nuevo en el futuro), puesto que el \emph{rand\_max} de la funcion \emph{rand()} en windows es menor a la cantidad de lineas del archivo que se nos proporciono como entrada.
+	Primero que nada, encontramos necesario distinguir el m'etodo de generaci'on de cada n'umero aleatorio segun en que sistema operativo nos encontremos (lo hicimos solo para windows y linux pero lo escribimos de tal forma que sea f'acil añadir un caso nuevo en el futuro), puesto que el \emph{rand\_max} de la funci'on \emph{rand()} en windows es menor a la cantidad de l'ineas del archivo que se nos proporcion'o como entrada.
 	\\
-	Los metodos para generar los numeros aleatorios son los siguientes (copia del archivo \emph{generacion.c}):
+	Los m'etodos para generar los numeros aleatorios son los siguientes (copia del archivo \emph{generacion.c}):
 	\begin{lstlisting}[style=CStyle]
-int numero_random_l (int tope){
+	int numero_random_l (int tope){
 	return rand () % tope;
-}
-int numero_random_w (int tope){
+	}
+	int numero_random_w (int tope){
 	// Usamos unsigned int como tipo de dato ya que los numeros generados seran
 	// siempre positivos.
 	unsigned int a = rand ();
@@ -205,35 +205,35 @@ int numero_random_w (int tope){
 	// superar el tamano de un int usamos long int (tambien unsinged).
 	unsigned long int c =  ((long) a * (long) b) % tope;
 	return (int)c;
-}
+	}
 	\end{lstlisting}
 	
-	Basicamente, en Linux resulta de generar el numero con la funcion \emph{rand()} y luego asignarle un tope. \\Mientras que en Windows generamos dos numeros int positivos aleatorios para luego multiplicarlos. A ese resultado le hacemos el modulo por el tope que tenemos y ese resultado va a ser el numero aleatorio final.
+	B'asicamente, en Linux resulta de generar el n'umero con la funci'on \emph{rand()} y luego asignarle un tope. \\Mientras que en Windows generamos dos n'umeros int positivos aleatorios para luego multiplicarlos. A ese resultado le hacemos el m'odulo por el tope que tenemos y ese resultado va a ser el n'umero aleatorio final.
 	
 	\paragraph{Generacion arreglo ARandom}
-	Este arreglo es el que se comentaba anteriormente. Simplemente le asignamos un espacio en memoria y lo vamos completando a medida que se van saliendo los numeros aleatorios, complentando su campo de \emph{numLinea} con el numero generado, y el campo \emph{pos} con el valor del iterador que se esta utilizando.
+	Este arreglo es el que se comentaba anteriormente. Simplemente le asignamos un espacio en memoria y lo vamos completando a medida que se van saliendo los n'umeros aleatorios, complentando su campo de \emph{numLinea} con el n'umero generado, y el campo \emph{pos} con el valor del iterador que se esta utilizando.
 	
-	\paragraph{Generacion arreglos nombres y paises}
+	\paragraph{Generaci'on arreglos nombres y pa'ises}
 	Ambos arreglos son generados de la misma manera solo que cambia el archivo del cual leen.\\
 	Primero se le asigna memoria al puntero a punteros a char, y luego a cada puntero a char de este. \\
-	Luego se crea el puntero a ARandom que contendra los numeros de linea y se ordena de forma tal que se pueda leer el archivo una sola vez, y de la forma mas efetiva. Creemos que esto es muy importante y que mejora los tiempos de ejecucion.\\
-	Vamos completando el arreglo a devolver con los numeros de linea en el orden en el que salieron originalmente para mantener la aleatoriedad.
-	Tambien notamos que se puede ser que salga varias veces un mismo numero de linea, caso que esta contemplado en nuestra implementacion. \\
-	En su momento estuvimos bastante tiempo hasta que en preguntamos por Zulip el problema que teniamos al leer los datos de los archivos de entrada, y este era que estabas haciendo el fscanf de la siguiente forma:
+	Luego se crea el puntero a ARandom que contendr'a los n'umeros de l'inea y se ordena de forma tal que se pueda leer el archivo una sola vez, y de la forma m'as efetiva. Creemos que esto es muy importante y que mejora los tiempos de ejecuci'on.\\
+	Vamos completando el arreglo a devolver con los n'umeros de l'inea en el orden en el que salieron originalmente para mantener la aleatoriedad.
+	Tambien notamos que se puede ser que salga varias veces un mismo n'umero de l'inea, caso que esta contemplado en nuestra implementaci'on. \\
+	En su momento estuvimos bastante tiempo hasta que en preguntamos por Zulip el problema que ten'iamos al leer los datos de los archivos de entrada, y este era que estabas haciendo el fscanf de la siguiente forma:
 	\begin{lstlisting}[style=CStyle]
-fscanf (Archivo, "%[^\n]\n", buffer);
+	fscanf (Archivo, "%[^\n]\n", buffer);
 	\end{lstlisting}
 	
-	Porque no sabiamos que en realidad los finales de linea en Windows estaban hechos de la forma \lstinline{\r\n} asi que pudimos adaptarlo a:
+	Porque no sab'iamos que en realidad los finales de l'inea en Windows estaban hechos de la forma \lstinline{\r\n} as'i que pudimos adaptarlo a:
 	\begin{lstlisting}[style=CStyle]
-fscanf (Archivo, "%[^\r\n]\r\n", buffer);
+	fscanf (Archivo, "%[^\r\n]\r\n", buffer);
 	\end{lstlisting}
-
+	
 	\paragraph{Escritura archivo salida}
-	Una vez que estan generados sin problemas y adecuadamente cada uno de los arreglos con los datos (el arreglo con los nombres, el arreglo con los paises), se procede a escribir cada linea de la siguiente manera:
+	Una vez que estan generados sin problemas y adecuadamente cada uno de los arreglos con los datos (el arreglo con los nombres, el arreglo con los pa'ises), se procede a escribir cada l'inea de la siguiente manera:
 	\begin{lstlisting}[style=CStyle]
-edad = generar_edad ();
-fprintf (archivoSalida,"%s, %d, %s\n", arregloNombres[i], edad, arregloPaises[i]);
+	edad = generar_edad ();
+	fprintf (archivoSalida,"%s, %d, %s\n", arregloNombres[i], edad, arregloPaises[i]);
 	\end{lstlisting}
 	
 	Dejando el archivo de salida en las condiciones que espera el programa2.
@@ -242,21 +242,26 @@ fprintf (archivoSalida,"%s, %d, %s\n", arregloNombres[i], edad, arregloPaises[i]
 	\paragraph{}
 	Lo primero que hace el segundo programa es leer el archivo generado por el primero, interpretar su contenido y almacenar esos datos en una lista simplemente enlazada de Personas, siendo Persona el tipo de estructura que esta apuntada a utilizarse en la consigna del trabajo.\\
 	
-	Luego, se aplica cada uno de los \textbf{3 algoritmos de ordenamiento} a la lista generada segun \textbf{2 funciones distintas de comparacion}. Volcamos las listas ordenadas junto con los tiempos de ejecucion de los algoritmos en 6 archivos distintos.\\
+	Luego, se aplica cada uno de los \textbf{3 algoritmos de ordenamiento} a la lista generada seg'un \textbf{2 funciones distintas de comparaci'on}. Volcamos las listas ordenadas junto con los tiempos de ejecuci'on de los algoritmos en 6 archivos distintos.\\
+	\subsection{Selection sort}
+	\paragraph{}
+	Primer m'etodo que implementamos, nos basamos en el pseudoc'odigo provisto en la consigna, y la animaci'on de wikipedia tambi'en fue de mucha ayuda.
+	\subsection{Insertion sort}
+	\subsection{Merge sort}
 	
 	\subsection{Comparaciones en tiempo de ejecuci'on}
 	Empezamos a comparar velocidad a partir de los 1000 elementos:
 	
 	\begin{tabular}{llll}
-		\textbf{Metodo de comparacion} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
+		\textbf{M'etodo de comparaci'on} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
 		EDAD & 0,0081088 & 0,002385 & 0,0002142 \\
 		LARGO NOMBRE & 0,0128264 & 0,0066656 & 0,0008458 \\
 	\end{tabular}\\\\
-
+	
 	5000 elementos.
-
+	
 	\begin{tabular}{llll}
-		\textbf{Metodo de comparacion} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
+		\textbf{M'etodo de comparaci'on} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
 		EDAD & 0,8411596 & 0,06091354 & 0,0012254 \\
 		LARGO NOMBRE & 0,3160378 & 0,1504216 & 0,0019852 \\
 	\end{tabular}\\\\
@@ -264,27 +269,27 @@ fprintf (archivoSalida,"%s, %d, %s\n", arregloNombres[i], edad, arregloPaises[i]
 	10000 elementos.
 	
 	\begin{tabular}{llll}
-		\textbf{Metodo de comparacion} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
+		\textbf{M'etodo de comparaci'on} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
 		EDAD & 0,4294468 & 0,295468 & 0,0030076 \\
 		LARGO NOMBRE & 1,6256668 & 0,7792646 & 0,0049134 \\
 	\end{tabular}\\\\
-
+	
 	20000 elementos.
 	
 	\begin{tabular}{llll}
-		\textbf{Metodo de comparacion} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
+		\textbf{M'etodo de comparaci'on} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
 		EDAD & 2,0903696 & 1,525693 & 0,0071012 \\
 		LARGO NOMBRE & 7,9087686 & 4,1888458 & 0,12585 \\
 	\end{tabular}\\\\
-
+	
 	30000 elementos.
 	
 	\begin{tabular}{llll}
-		\textbf{Metodo de comparacion} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
+		\textbf{M'etodo de comparaci'on} & \textbf{Selection} & \textbf{Insertion} & \textbf{Merge} \\
 		EDAD & 4,8456682 & 3,8137686 & 0,0114358 \\
 		LARGO NOMBRE & 18,5267306 & 10,484457 & 0,0194516 \\
 	\end{tabular}\\\\
-
+	
 	Cada uno de estos resultados es un promedio de 5 ejecuciones distintas con diferentes juegos de datos.
 	
 	Llegamos a la conclusi'on de que el \emph{merge sort} es el algoritmo mas rapido, lo cual era esperable ya que es el de menor complejidad. El \emph{selection sort} y el \emph{insertion sort} mantienen tiempos parecidos para volumenes de datos chicos, pero cuando empezamos a manejar cantidades mas significativas comenzamos a ver una diferencia. 
