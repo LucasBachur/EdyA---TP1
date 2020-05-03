@@ -17,35 +17,55 @@ int main (int argc, char **argv){
   int cant = atoi(argv[4]);
   int bandera1 = 1, bandera2 = 2, bandera3 = 3, retorno = 0;
 
-  // Si bien se podrian hacer en un solo buffer, preferimos dejarlo asi por
-  // claridad.
+  // Si bien los nombres de los archivos se podrian hacer en un solo buffer,
+  // preferimos dejarlo asi por claridad.
+  char nombreASalida[200] = "Listas/";
+  strcat (nombreASalida, argv[3]);
+
+  if (cant == 0){
+    printf ("La cantidad de personas que especifico es 0.\n");
+
+    FILE *ArchivoS = fopen (nombreASalida, "w");
+    if (ArchivoS != NULL){
+      bandera3 = 0;
+      fclose (ArchivoS);
+      printf ("Archivo vacio creado.\n");
+    }
+    else{
+      printf("No se pudo crear el archivo de salida\n");
+      retorno = bandera3;
+    }
+  }
+  else{
+
     char nombreANombres[200] = "Generacion/";
     strcat (nombreANombres, argv[1]);
     char nombreAPaises[200] = "Generacion/";
     strcat (nombreAPaises, argv[2]);
-    char nombreASalida[200] = "Listas/";
-    strcat (nombreASalida, argv[3]);
 
-  char **arreglo_nombres = generar_arreglo(nombreANombres, cant, &bandera1, LONG_ARCHIVO_N);
-  // Si no hubo problemas con el archivo...
-  if (bandera1 == 0){
-    char **arreglo_paises = generar_arreglo(nombreAPaises, cant, &bandera2, LONG_ARCHIVO_P);
-    // Si no hubo problemas con el archivo...
-    if (bandera2 == 0){
-      escribir_archivo (arreglo_nombres, arreglo_paises, cant, nombreASalida, &bandera3);
-      destruir_arraybi (arreglo_paises, cant);
-      destruir_arraybi (arreglo_nombres, cant);
+    if (cant != 0){
+      char **arreglo_nombres = generar_arreglo(nombreANombres, cant, &bandera1, LONG_ARCHIVO_N);
       // Si no hubo problemas con el archivo...
-      if (bandera3 == 0){
-        printf ("Archivo de datos de prueba generado con exito.\n");
+      if (bandera1 == 0){
+        char **arreglo_paises = generar_arreglo(nombreAPaises, cant, &bandera2, LONG_ARCHIVO_P);
+        // Si no hubo problemas con el archivo...
+        if (bandera2 == 0){
+          escribir_archivo (arreglo_nombres, arreglo_paises, cant, nombreASalida, &bandera3);
+          // Si no hubo problemas con el archivo...
+          if (bandera3 == 0){
+            printf ("Archivo de datos de prueba generado con exito.\n");
+          }else{
+            retorno = bandera3;
+          }
+        }else{
+          retorno = bandera2;
+        }
+        destruir_arraybi (arreglo_paises, cant);
       }else{
-        retorno = bandera3;
+        retorno = bandera1;
       }
-    }else{
-      retorno = bandera2;
+      destruir_arraybi (arreglo_nombres, cant);
     }
-  }else{
-    retorno = bandera1;
   }
 
   return retorno;

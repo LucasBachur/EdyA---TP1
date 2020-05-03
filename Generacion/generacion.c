@@ -1,4 +1,4 @@
-// Este programa, lee el archivo, y escribe en otro las personas con sus 
+// Este programa, lee el archivo, y escribe en otro las personas con sus
 // caracteristicas de la sigueinte manera:
 // Juan Perez, 19, Villa General Belgrano
 // Francisco Jose Maria Olviares, 23, Rosario
@@ -20,7 +20,7 @@ void sistema_operativo (int *band){
 }
 
 int numero_random_l (int tope){
-  return rand () % (tope + 1);
+  return rand () % tope;
 }
 
 int numero_random_w (int tope){
@@ -51,28 +51,18 @@ int generar_numero_random (int band, int tope){
 }
 
 ARandom* posiciones_aleatorias (int cant, int longArchivo){
-  ARandom *arregloRand = malloc (sizeof (ARandom) * (cant + 1));
-  // Inicializacion del array.
-  for (int i = 0; i < cant; ++i){
-    arregloRand[i].numLinea = -1;
-    arregloRand[i].pos = -1;
-  }
+  ARandom *arregloRand = malloc (sizeof (ARandom) * cant );
   int nRandom;
   int os;
   sistema_operativo (&os);
 
   // Rellenando el arreglo a devolver.
-  for (int j = 1; j <= cant; ++j){
+  for (int j = 0; j < cant; ++j){
     // Creando numero aleatorio.
     nRandom = generar_numero_random (os, longArchivo);
-    // Actualizando el maximo.
-    if (arregloRand[0].numLinea < nRandom){
-      arregloRand[0].numLinea = nRandom;
-      arregloRand[0].pos = -1;
-    }
     // Actualizando el arreglo.
     arregloRand[j].numLinea = nRandom;
-    arregloRand[j].pos = j - 1;
+    arregloRand[j].pos = j;
   }
   return arregloRand;
 }
@@ -88,53 +78,52 @@ int ARandom_mayor (const void *dato1, const void *dato2){
 
 char **generar_arreglo (char *nombreArchivoE, int cant, int *bandera, int longArchivo){
   // Creando el arreglo a devolver.
-  char **arregloNombres = malloc (sizeof (char*) * cant);
+  char **arregloData = malloc (sizeof (char*) * cant);
   for (int i = 0; i < cant; ++i)
-    arregloNombres[i] = malloc (sizeof (char) * BUFFER);
+    arregloData[i] = malloc (sizeof (char) * BUFFER);
 
   // Arreglo que tendra los numeros de lineas.
   ARandom *arrayPos = posiciones_aleatorias(cant, longArchivo);
-  // Se hace en +1 porque el primero tiene el mas grande repetido y no nos
-  // interesa ordenarlo.
-  qsort (arrayPos + 1, cant, sizeof(ARandom), ARandom_mayor);
+  qsort (arrayPos, cant, sizeof(ARandom), ARandom_mayor);
+
+  int maxLinea = arrayPos[cant - 1].numLinea;
+
   FILE *Archivo = fopen (nombreArchivoE, "r");
   // Si se abrio correctamente...
   if (Archivo != NULL){
     char buffer[BUFFER];
-    // colocados comienza desde 1 pues queremos saltear el primer elemento de
-    // arrayPos.
-    for (int i = 0, colocados = 1; i <= arrayPos[0].numLinea; ++i){
+    for (int i = 0, colocados = 0; i <= maxLinea; ++i){
       fscanf (Archivo, "%[^\r\n]\r\n", buffer);
       // Si la linea que almaceno el buffer, es de las que nos interesa
-      // entonces la guardamos en el arregloNombres.
-      while (colocados < cant + 1 && i == arrayPos[colocados].numLinea){
-        strcpy (arregloNombres[arrayPos[colocados].pos], buffer);
+      // entonces la guardamos en el arregloData.
+      while (colocados < cant && i == arrayPos[colocados].numLinea){
+        strcpy (arregloData[arrayPos[colocados].pos], buffer);
         ++colocados;
       }
     }
     // Se modifica la bandera, indicando que el archivo se manipulo bien.
     *bandera = 0;
+    fclose (Archivo);
   }
   else{
     printf ("No se pudo abrir el archivo de extracion de datos.\n");
   }
   free (arrayPos);
-  fclose (Archivo);
-  return arregloNombres;
+  return arregloData;
 }
 
 int generar_edad (){
   return (rand() % 100) + 1;
 }
 
-void escribir_archivo (char **arregloNombres, char **arregloPaises, int cantLineas, char *nombreArchivoS, int *bandera){
+void escribir_archivo (char **arregloData, char **arregloPaises, int cantLineas, char *nombreArchivoS, int *bandera){
   FILE *archivoSalida = fopen(nombreArchivoS, "w");
   // Si el archivo se abrio correctamente...
   if (archivoSalida != NULL){
     int edad;
     for (int i = 0; i < cantLineas; ++i){
       edad = generar_edad ();
-      fprintf (archivoSalida,"%s, %d, %s\n", arregloNombres[i], edad, arregloPaises[i]);
+      fprintf (archivoSalida,"%s, %d, %s\n", arregloData[i], edad, arregloPaises[i]);
     }
     // Se modifica la bandera, indicando que el archivo se uso correctamente.
     *bandera = 0;

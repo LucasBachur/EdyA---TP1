@@ -1,4 +1,12 @@
-# -*- MakeFile -*-
+# Archivo para la compilacion del programa, se debe ingresar en la consola en cualquier orden: 
+# make programa1
+# make programa2
+# Y se compilaran en cada caso los programas indicados.
+# Tambien incluimos la instruccion programas que compilara ambos programas en un solo comando.
+
+programas: generacion.o generar.o listas.o glist.o
+	gcc -o programa1.out generar.o generacion.o
+	gcc -o programa2.out listas.o glist.o
 
 programa1: generacion.o generar.o
 	gcc -o programa1.out generar.o generacion.o

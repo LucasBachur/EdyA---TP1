@@ -48,11 +48,10 @@ void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion,
       // Si se le paso un tiempo valido lo imprime.
       fprintf (Archivo, "Tiempo de ordenamiento: |%lf|\n\n", tiempo);
     }
-
+    GNodo *iterador = lista->inicio;
     // Aplicamos la funcion de impresion a cada dato de la lista.
-    forrapido ((*lista), iterador){
+    for (; iterador != NULL; iterador = iterador->sig)
       funcion (iterador->dato, Archivo);
-    }
   }else{
     printf ("Archivo de escritura fallo.\n");
   }
@@ -61,9 +60,9 @@ void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion,
 
 GList glist_copiar_nodos (GList lista){
   GList nuevaLista = glist_crear ();
-  forrapido (lista, iterador){
+  GNodo *iterador = lista.inicio;
+  for (; iterador != NULL; iterador = iterador->sig)
     glist_agregar_final (&nuevaLista, iterador->dato);
-  }
   return nuevaLista;
 }
 
@@ -114,7 +113,7 @@ void glist_ordenar_archivar (char *nombreArchivoSalida,
  Compara comparar, GList lista){
   // Genera una copia de la lista a ordenar.
   GList listaAOdenar = glist_copiar_nodos (lista);
-  
+
   // Se cuenta el tiempo de ejecucion del algoritmo de ordenamiento.
   clock_t begin = clock();
   listaAOdenar = metodo_ordenamiento (listaAOdenar, comparar);
@@ -138,7 +137,7 @@ void merge (GNodo **izq, GNodo **der, Compara comparar){
   }
   else {
     resultado = iterador_der;
-    *izq = *der; 
+    *izq = *der;
     // Asi, lista izquierda sera el comienzo de la lista mergeada total.
     iterador_der = iterador_der->sig;
   }
@@ -190,7 +189,7 @@ GList glist_selection_sort (GList lista, Compara funcion){
   for (; iterador1->sig != NULL; iterador1 = iterador1->sig){
     relevante = iterador1;
     iterador2 = iterador1->sig;
-    // Buscando el minimo elemento (segun la funcion que compara) 
+    // Buscando el minimo elemento (segun la funcion que compara)
     // de la parte de la lista no ordenada.
     for (; iterador2 != NULL; iterador2 = iterador2->sig){
       if (funcion (iterador2->dato, relevante->dato) < 0){
@@ -221,7 +220,7 @@ GList glist_insertion_sort (GList lista, Compara funcion){
       while (iterador2 != antComparando && funcion (antComparando->sig->dato,
        iterador2->sig->dato) >= 0){
         iterador2 = iterador2->sig;
-      } 
+      }
       // Si salio del bucle por esto, entonces la lista parcial esta ordenada.
       if (iterador2 == antComparando){
         // Unico caso en el que el iterador avanza de manera "forzada".
