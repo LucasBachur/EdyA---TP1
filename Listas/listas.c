@@ -25,6 +25,8 @@ int main (int argc, char **argv){
 
   glist_ordenar_archivar ("Edad_menor_selection.txt", imprimir_persona_archivo, glist_selection_sort, edad_menor, lista);
 
+  glist_imprimir_archivo (&lista, imprimir_persona_archivo, "Lista original.txt", -1);
+
   glist_ordenar_archivar ("Edad_menor_insertion.txt", imprimir_persona_archivo, glist_insertion_sort, edad_menor, lista);
 
   glist_ordenar_archivar ("Edad_menor_mergesort.txt", imprimir_persona_archivo, glist_merge_sort, edad_menor, lista);

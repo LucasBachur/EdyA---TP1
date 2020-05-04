@@ -44,7 +44,7 @@ void glist_imprimir_archivo (GList *lista, ImprimeArchivo funcion,
   FILE *Archivo = fopen (nombreArchivoSalida, "w");
   if (Archivo != NULL){
     // Si se abrio el archivo correctamente...
-    if (tiempo != -1) {
+    if (tiempo > -1) {
       // Si se le paso un tiempo valido lo imprime.
       fprintf (Archivo, "Tiempo de ordenamiento: |%lf|\n\n", tiempo);
     }
