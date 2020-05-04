@@ -40,5 +40,8 @@ persona.o: $(persona).c $(persona).h
 glist.o: $(glist).c $(glist).h
 	gcc $(flags) -c $(glist).c
 
-clean:
+cleanLin:
 	rm -rf *.out *.o *txt
+
+cleanWin:
+	del /Q /F test.exe *.out *.o *txt
